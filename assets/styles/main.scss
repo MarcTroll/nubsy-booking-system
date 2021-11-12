@@ -1,0 +1,124 @@
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons);
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap');
+
+$primary-color: #0c81de;
+$primary-color-light: lighten($primary-color, 15%);
+
+$secondary-color: #262e3e;
+$success-color: #388E3C;
+$error-color: #D32F2F;
+$link-color: #0c81de;
+
+$small-screen: 600px;
+$small-screen-up: 601px;
+$medium-screen: 992px;
+$medium-screen-up: 993px;
+$large-screen: 1200px;
+$large-screen-up: 1201px;
+
+$small-up: "min-width : #{$small-screen-up}";
+$medium-up: "min-width : #{$medium-screen-up}";
+$medium-down: "max-width : #{$medium-screen}";
+$large: "min-width : #{$large-screen-up}";
+$small: "max-width : #{$small-screen}";
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #212121;
+  background: #FFFFFF;
+  line-height: 1.5;
+
+  @media only screen and (min-width: 0) {
+    font-size: 14px;
+  }
+
+  @media all and ($medium-up) {
+    font-size: 14.5px;
+  }
+
+  @media all and ($large) {
+    font-size: 15px;
+  }
+}
+
+.content {
+  @media all and (max-width: 768px) {
+    width: 95%;
+  }
+  @media all and (min-width: 769px) and (max-width: 1100px) {
+    width: 90%;
+  }
+  @media all and (min-width: 1101px) {
+    width: 80%;
+    max-width: 1100px;
+  }
+  margin: 25px auto;
+}
+
+.mobile {
+  @media screen and (min-width: 769px) {
+    display: none;
+  }
+}
+.desktop {
+  @media screen and (max-width: 769px) {
+    display: none;
+  }
+}
+
+a {
+  color: $link-color;
+  text-decoration: none;
+}
+
+// headings
+h1 {
+  font-size: 42px;
+  font-weight: 300;
+  line-height: 56px;
+}
+
+h2 {
+  font-size: 34px;
+  font-weight: 300;
+  line-height: 46px;
+}
+
+h3 {
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 38px;
+}
+
+h4 {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 34px;
+}
+
+h5 {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 28px;
+}
+
+h1, h2, h3, h4, h5 {
+  margin: 0;
+}
+
+p {
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 23px;
+}
+
+// button
+.button {
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
