@@ -1,5 +1,4 @@
-import {createPool, PoolConnection} from "mysql2/promise";
-import ErrnoException = NodeJS.ErrnoException;
+import {createPool} from "mysql2/promise";
 import {Formatting} from "~/server/lib/system/log/Formatting";
 
 /**
@@ -9,11 +8,20 @@ export class Database {
     
     private connectionPool: any;
     
-    constructor() {
+    constructor(options: {} = {
+        host: "localhost",
+        port: 3306,
+        user: "root",
+        password: "admin",
+        connectionLimit: 10
+    }) {
+        // TODO: Check properties
         this.connectionPool = createPool({
-            host: "localhost",
-            user: "root",
-            password: "secret"
+            host: options.host,
+            port: options.port,
+            user: options.username,
+            password: options.password,
+            connectionLimit: options.connectionLimit
         });
     }
     
@@ -25,7 +33,8 @@ export class Database {
             if(connectError.code === "ECONNREFUSED") {
                 console.log(`${Formatting.COLOR_RED}${Formatting.BOLD}Fatal error occurred establishing database connection:`);
                 console.log(`  ${Formatting.RESET}Database-Connection could not be established. Please check your config and everything is up and running!`);
-                process.exit(9001);
+                // Don't stop. Display error message in browser and console if error occurs.
+                // process.exit(9001);
             }
             throw connectError;
         }

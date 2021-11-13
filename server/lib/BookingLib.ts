@@ -1,5 +1,6 @@
 import {Config} from "~/server/lib/system/config/Config";
 import {Database} from "~/server/lib/system/database/Database";
+import {PoolConnection} from "mysql2/promise";
 
 class BookingLibSingleton {
     
@@ -9,6 +10,15 @@ class BookingLibSingleton {
     constructor() {
         this.config = new Config();
         this.db = new Database();
+    }
+
+    async init() {
+        try {
+            let connection : PoolConnection = await this.getDatabase().getConnection();
+            connection.release();
+        } catch(error) {
+            console.log(error);
+        }
     }
     
     getConfig() {
