@@ -8,14 +8,20 @@ export class Database {
     
     private connectionPool: any;
     
-    constructor(options: {} = {
+    constructor(options: {
+        host?: string;
+        port?: number;
+        username?: string;
+        password?: string;
+        connectionLimit?: number;
+    } = {
         host: "localhost",
         port: 3306,
-        user: "root",
+        username: "root",
         password: "admin",
         connectionLimit: 10
     }) {
-        // TODO: Check properties
+        // Don't pass options directly to create connection pool. Misconfiguration may lead to unexpected behaviour.
         this.connectionPool = createPool({
             host: options.host,
             port: options.port,

@@ -1,0 +1,9 @@
+{
+  "database": {
+    "host": "localhost",
+    "port": 3306,
+    "username": "root",
+    "password": "admin",
+    "connectionLimit": 10
+  }
+}
