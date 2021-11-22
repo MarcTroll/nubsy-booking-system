@@ -9,7 +9,7 @@ class BookingLibSingleton {
     
     constructor() {
         this.config = new Config();
-        this.db = new Database();
+        this.db = new Database(this.config.getDatabaseConfigOptions());
     }
 
     async init() {
