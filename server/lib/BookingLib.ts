@@ -17,7 +17,7 @@ class BookingLibSingleton {
             let connection : PoolConnection = await this.getDatabase().getConnection();
             connection.release();
         } catch(error) {
-            console.log(error);
+            // Do nothing. Error is already logged in Database#getConnection()
         }
     }
     
