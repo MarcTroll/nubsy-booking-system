@@ -2,15 +2,18 @@ import {Config} from "~/server/lib/system/config/Config";
 import {Database} from "~/server/lib/system/database/Database";
 import {PoolConnection} from "mysql2/promise";
 import {Formatting} from "~/server/lib/system/log/Formatting";
+import {SessionHandler} from "~/server/lib/system/session/SessionHandler";
 
 class BookingLibSingleton {
     
     private readonly db: Database;
     private readonly config: Config;
+    private readonly sessionHandler: SessionHandler;
     
     constructor() {
         this.config = new Config();
         this.db = new Database(this.config.getDatabaseConfigOptions());
+        this.sessionHandler = new SessionHandler();
     }
 
     async init() {
@@ -30,6 +33,10 @@ class BookingLibSingleton {
     
     getDatabase() {
         return this.db;
+    }
+    
+    getSessionHandler() {
+        return this.sessionHandler;
     }
     
 }
