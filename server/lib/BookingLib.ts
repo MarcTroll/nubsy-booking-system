@@ -1,11 +1,12 @@
 import {Config} from "~/server/lib/system/config/Config";
 import {Database} from "~/server/lib/system/database/Database";
 import {PoolConnection} from "mysql2/promise";
+import {Formatting} from "~/server/lib/system/log/Formatting";
 
 class BookingLibSingleton {
     
     private readonly db: Database;
-    private config: Config;
+    private readonly config: Config;
     
     constructor() {
         this.config = new Config();
@@ -15,7 +16,9 @@ class BookingLibSingleton {
     async init() {
         try {
             let connection : PoolConnection = await this.getDatabase().getConnection();
-            connection.release();
+            await connection.release();
+            
+            console.log(`${Formatting.COLOR_GREEN}Successfully connected to database.${Formatting.RESET}`)
         } catch(error) {
             // Do nothing. Error is already logged in Database#getConnection()
         }

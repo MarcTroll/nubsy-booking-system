@@ -4,6 +4,7 @@
     "port": 3306,
     "username": "root",
     "password": "admin",
+    "database": "bookingsys",
     "connectionLimit": 10
   }
 }
