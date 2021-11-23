@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "http";
 
 import {BookingLib} from "~/server/lib/BookingLib";
-import {PoolConnection, QueryError, RowDataPacket} from "mysql2/promise";
+import {PoolConnection, RowDataPacket} from "mysql2/promise";
 
 export default async (req: IncomingMessage, res: ServerResponse) => {
 	const connection : PoolConnection = await BookingLib.getDatabase().getConnection();
