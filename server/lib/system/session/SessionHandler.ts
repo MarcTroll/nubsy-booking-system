@@ -68,7 +68,7 @@ export class SessionHandler {
     
     /**
      * Returns the userID of the user the provided sessionID is linked to. Returns 0 if no user is linked to the
-     * provided sessionID (e.g. active session is not logged in)
+     * provided sessionID or no such session exists.
      * */
     public async getUserID(sessionID : string) : Promise<number> {
         const connection : PoolConnection = await BookingLib.getDatabase().getConnection();
