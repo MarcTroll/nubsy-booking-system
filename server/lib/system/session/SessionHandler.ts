@@ -18,15 +18,15 @@ export class SessionHandler {
         do {
             sessionID = randomBytes(20).toString('base64');
             
-            const [rows, _] = await connection.execute<RowDataPacket[]>("SELECT * FROM sessions WHERE sessionID=?", [sessionID]);
+            const [rows, _] = await connection.execute<RowDataPacket[]>("SELECT * FROM user_session WHERE sessionID=?", [sessionID]);
             if(rows.length == 0) {
                 searchSessionID = false;
             }
         } while(searchSessionID);
         
         await connection.execute(
-            "INSERT INTO sessions(sessionID, userID, ipAddress, userAgent, lastActivity) VALUES (?, ?, ?, ?)",
-            [sessionID, 0, ipAddress, userAgent, unixTime]);
+            "INSERT INTO user_session(sessionID, userID, ipAddress, userAgent, creationTime, lastActivity) VALUES (?, ?, ?, ?, ?, ?)",
+            [sessionID, 0, ipAddress, userAgent, unixTime, unixTime]);
         await connection.release();
         
         return sessionID;
@@ -40,7 +40,7 @@ export class SessionHandler {
         
         const connection : PoolConnection = await BookingLib.getDatabase().getConnection();
         // update session information
-        await connection.execute("UPDATE sessions SET ipAddress = ?, userAgent = ?, lastActivity = ? WHERE sessionID = ?",
+        await connection.execute("UPDATE user_session SET ipAddress = ?, userAgent = ?, lastActivity = ? WHERE sessionID = ?",
             [ipAddress, userAgent, unixTime, sessionID]);
         
         await connection.release();
@@ -55,14 +55,14 @@ export class SessionHandler {
         const unixTime = Math.floor(new Date().getTime() / 1000);
         
         const connection : PoolConnection = await BookingLib.getDatabase().getConnection();
-        const [rows, _] = await connection.execute<RowDataPacket[]>("SELECT * FROM sessions WHERE sessionID=?", [sessionID]);
+        const [rows, _] = await connection.execute<RowDataPacket[]>("SELECT * FROM user_session WHERE sessionID=?", [sessionID]);
         // no such session exists
         if(rows.length == 0) {
             await connection.release();
             return;
         }
     
-        await connection.execute("UPDATE sessions SET userID = ?, lastActivity = ? WHERE sessionID = ?", [userID, unixTime, sessionID]);
+        await connection.execute("UPDATE user_session SET userID = ?, lastActivity = ? WHERE sessionID = ?", [userID, unixTime, sessionID]);
         await connection.release();
     }
     
@@ -72,7 +72,7 @@ export class SessionHandler {
      * */
     public async getUserID(sessionID : string) : Promise<number> {
         const connection : PoolConnection = await BookingLib.getDatabase().getConnection();
-        const [rows, _] = await connection.execute<RowDataPacket[]>("SELECT userID FROM sessions WHERE sessionID=?", [sessionID]);
+        const [rows, _] = await connection.execute<RowDataPacket[]>("SELECT userID FROM user_session WHERE sessionID=?", [sessionID]);
         await connection.release();
         
         return rows[0].userID || 0;
