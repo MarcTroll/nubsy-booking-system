@@ -3,7 +3,7 @@ import {Ref} from "@vue/reactivity";
 
 useMeta({
     title: "Buchungskalender"
-})
+});
 
 const settings = {
     start: 8,
@@ -33,7 +33,18 @@ function getTimeSlots() {
     return slots;
 }
 
+let timetable;
+
 const date : Ref<Date> = ref(new Date());
+watch(date, async (value) => {
+    timetable = await $fetch("/api/timetable/get", {
+        params: {
+            unixDay: value.getTime() / 1000
+        }});
+});
+
+// TODO: Doesn't work for now. See https://github.com/nuxt/framework/issues/1042
+// timetable = await $fetch("/api/timetable/get");
 </script>
 
 <template>
@@ -45,7 +56,7 @@ const date : Ref<Date> = ref(new Date());
         </div>
         <div class="content">
             <div class="calendarNavBar">
-                <DatePicker v-model:date="date" supports-time />
+                <DatePicker v-model:date="date" />
             </div>
         </div>
         <div class="content">
