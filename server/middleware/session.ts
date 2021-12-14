@@ -11,12 +11,13 @@ export default async (req : IncomingMessage, res: ServerResponse) => {
         maxAge: 86400 * 30 // 30 Tage
     };
     
-    const cookieValue = useCookie(req, "sessionID");
+    let cookieValue = useCookie(req, "sessionID");
     
     if(!cookieValue) {
         const sessionID = await BookingLib.getSessionHandler().createSession(req.socket.remoteAddress, req.headers["user-agent"]);
         
         // set cookie
+        cookieValue = sessionID;
         setCookie(res, "sessionID", sessionID, options);
     } else {
         // TODO: Think about updating session only on non-API-Route-Requests.
@@ -28,5 +29,5 @@ export default async (req : IncomingMessage, res: ServerResponse) => {
     // TODO
     // Doesn't work for now. See https://github.com/nuxt/framework/issues/1042
     // @ts-ignore
-    req.sessionID = useCookie(req, "sessionID");
+    req.sessionID = cookieValue;
 }
