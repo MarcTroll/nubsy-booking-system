@@ -1,5 +1,5 @@
 <script setup>
-const { data: hello } = await useFetch("/api/hello");
+const { data: hello } = await useFetch("/api/hello", {headers: useRequestHeaders()});
 
 useMeta({
     title: "User"

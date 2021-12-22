@@ -44,7 +44,12 @@ watch(date, async (value) => {
 });
 
 // TODO: Doesn't work for now. See https://github.com/nuxt/framework/issues/1042
-// timetable = await $fetch("/api/timetable/get");
+timetable = await useFetch("/api/timetable/get", {
+    headers: useRequestHeaders(),
+    params: {
+        unixDay: (new Date().setHours(0, 0, 0, 0)) / 1000
+    }
+});
 </script>
 
 <template>
