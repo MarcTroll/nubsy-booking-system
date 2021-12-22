@@ -26,7 +26,7 @@ export class SessionHandler {
         
         await connection.execute(
             "INSERT INTO user_session(sessionID, userID, ipAddress, userAgent, creationTime, lastActivity) VALUES (?, ?, ?, ?, ?, ?)",
-            [sessionID, 0, ipAddress, userAgent, unixTime, unixTime]);
+            [sessionID, null, ipAddress, userAgent, unixTime, unixTime]);
         await connection.release();
         
         return sessionID;
