@@ -10,6 +10,10 @@ export class SessionHandler {
     public async createSession(ipAddress : string, userAgent : string) : Promise<string> {
         const unixTime = Math.floor(new Date().getTime() / 1000);
         
+        if(!ipAddress) {
+            ipAddress = "unknown destination";
+        }
+        
         let sessionID;
         let searchSessionID = true;
         
@@ -37,6 +41,10 @@ export class SessionHandler {
      * */
     public async updateSession(sessionID : string, ipAddress : string, userAgent : string) : Promise<string> {
         const unixTime = Math.floor(new Date().getTime() / 1000);
+    
+        if(!ipAddress) {
+            ipAddress = "unknown destination";
+        }
         
         const connection : PoolConnection = await BookingLib.getDatabase().getConnection();
         // update session information
