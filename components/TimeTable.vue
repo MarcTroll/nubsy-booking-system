@@ -17,12 +17,16 @@
         headers: useRequestHeaders()
     });
 
-    console.log("load")
     // Update timetable when changing the date
     watch(tableDate, (value) => {
+        if(_timer !== null) {
+            clearTimeout(_timer);
+            _timer = null;
+        }
+
+        // TODO: set loading to true
+
         // Wait 500 milliseconds before request for date changes (e.g. when skipping through dates)
-        console.log("change")
-        window.clearTimeout(_timer);
         _timer = setTimeout(async () => {
             console.log("request")
             timetable = await $fetch("/api/timetable/get", {
@@ -36,6 +40,28 @@
 
 <template>
     <div>
-        Timetable for {{tableDate.time}}
+        <table class="calendar">
+            <!--thead>
+                <tr>
+                    <td class="calendarTime">Zeit</td>
+                    <td v-for="court of timetable.courts">Platz {{court.courtName}}</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="slot in getTimeSlots()">
+                    <td class="calendarTime">
+                        {{getTime(getBaseTime() + slot)}}
+                    </td>
+                    <td v-for="court in timetable.courts"
+                        :data-court-id="court.courtID"
+                        :data-time="getBaseTime() + slot"
+                        :class="slotClassList(court, slot)"
+                        class="time-slot">
+                        <Timeslot :data-court-id="court.courtID"
+                                  :data-time="getBaseTime() + slot" />
+                    </td>
+                </tr>
+            </tbody-->
+        </table>
     </div>
 </template>

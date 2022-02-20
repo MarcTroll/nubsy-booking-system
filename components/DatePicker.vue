@@ -84,9 +84,6 @@ const emits = defineEmits([
 let showPicker: Ref<boolean> = ref(false);
 
 let date = reactive(props.date);
-watch(date, value => {
-    console.log("b", value)
-});
 date.time.setHours(12, 0, 0, 0);
 
 let day: Ref<number> = ref(date.time.getDate());

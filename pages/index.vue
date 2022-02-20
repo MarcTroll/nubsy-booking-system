@@ -24,9 +24,6 @@ function getTime(datetime : number) {
 let timetable;
 
 const date = reactive({time: new Date()});
-watch(date, value => {
-    console.log("a", value)
-});
 
 function getTimeSlots() {
     let minStartTime = 86400;
@@ -80,31 +77,8 @@ const slotClassList = (court, slot) => {
                 Anmelden/registrieren
             </div>
         </div>
-        <TimeTable v-bind:date="date" />
         <div class="content">
-            <table class="calendar">
-                <!--thead>
-                    <tr>
-                        <td class="calendarTime">Zeit</td>
-                        <td v-for="court of timetable.courts">Platz {{court.courtName}}</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="slot in getTimeSlots()">
-                        <td class="calendarTime">
-                            {{getTime(getBaseTime() + slot)}}
-                        </td>
-                        <td v-for="court in timetable.courts"
-                            :data-court-id="court.courtID"
-                            :data-time="getBaseTime() + slot"
-                            :class="slotClassList(court, slot)"
-                            class="time-slot">
-                            <Timeslot :data-court-id="court.courtID"
-                                      :data-time="getBaseTime() + slot" />
-                        </td>
-                    </tr>
-                </tbody-->
-            </table>
+            <TimeTable v-bind:date="date" />
         </div>
     </div>
 </template>
