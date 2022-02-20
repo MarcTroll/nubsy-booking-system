@@ -13,7 +13,11 @@ export default async (req : IncomingMessage, res: ServerResponse) => {
     
     let cookieValue = useCookie(req, "sessionID");
     
-    if(!cookieValue) {
+    // throws an error on failure
+    let connection = await BookingLib.getDatabase().getConnection();
+    await connection.release();
+
+    if(!cookieValue || !await BookingLib.getSessionHandler().isSession(cookieValue)) {
         const sessionID = await BookingLib.getSessionHandler().createSession(req.socket.remoteAddress, req.headers["user-agent"]);
         
         // set cookie
@@ -26,8 +30,6 @@ export default async (req : IncomingMessage, res: ServerResponse) => {
         setCookie(res, "sessionID", cookieValue, options);
     }
     
-    // TODO
-    // Doesn't work for now. See https://github.com/nuxt/framework/issues/1042
     // @ts-ignore
     req.sessionID = cookieValue;
 }

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {Ref} from "@vue/reactivity";
 import DatePicker from "~/components/DatePicker.vue";
 import TimeTable from "~/components/TimeTable.vue";
 
@@ -7,59 +6,10 @@ useMeta({
     title: "Buchungskalender"
 });
 
-const settings = {
-    slotLength: 30
-}
+const initDate = new Date();
+initDate.setHours(0, 0,0, 0);
 
-function getBaseTime(date : Date = new Date()) {
-    let now = new Date();
-    return ((new Date(now.getFullYear(), now.getMonth(), now.getDate())).getTime())/1000;
-}
-
-function getTime(datetime : number) {
-    let date = new Date(datetime * 1000);
-    return `${date.getHours() < 10 ? "0" : ""}${date.getHours()}:${date.getMinutes() < 10 ? "0" : ""}${date.getMinutes()}`
-}
-
-let timetable;
-
-const date = reactive({time: new Date()});
-
-function getTimeSlots() {
-    let minStartTime = 86400;
-    let maxEndTime = 0;
-    for(let court of timetable.courts) {
-        if(court.openTime < minStartTime) {
-            minStartTime = court.openTime;
-        }
-        if(court.closeTime > maxEndTime) {
-            maxEndTime = court.closeTime;
-        }
-    }
-
-    let slots = [];
-    for(let i = minStartTime; i < (maxEndTime); i+= settings.slotLength * 60) {
-        slots.push(i);
-    }
-
-    return slots;
-}
-
-const slotClassList = (court, slot) => {
-    let classList = {
-        disabled: false
-    };
-
-    if(court.openTime > slot) {
-        classList.disabled = true;
-    }
-
-    if(court.closeTime <= slot) {
-        classList.disabled = true;
-    }
-
-    return classList;
-}
+const date = reactive({time: initDate});
 </script>
 
 <template>

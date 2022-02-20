@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, ref, Ref, UnwrapNestedRefs} from "@vue/reactivity";
+import {computed, ref, Ref} from "@vue/reactivity";
 
 const months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 const days = [{

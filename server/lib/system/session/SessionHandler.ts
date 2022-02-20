@@ -36,6 +36,15 @@ export class SessionHandler {
         return sessionID;
     }
     
+    public async isSession(sessionID: string) : Promise<boolean> {
+        const connection : PoolConnection = await BookingLib.getDatabase().getConnection();
+    
+        const [rows, _] = await connection.execute<RowDataPacket[]>("SELECT * FROM user_session WHERE sessionID=?", [sessionID]);
+        await connection.release();
+        
+        return rows.length === 1;
+    }
+    
     /**
      * Creates a new session and returns its sessionID
      * */
