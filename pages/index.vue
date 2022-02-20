@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import {Ref} from "@vue/reactivity";
+import DatePicker from "~/components/DatePicker.vue";
+import TimeTable from "~/components/TimeTable.vue";
 
 useMeta({
     title: "Buchungskalender"
 });
 
 const settings = {
-    start: 8,
-    end: 21,
-    slotLength: 30,
-    courts: ["Platz 2", "Platz 3", "Platz 4", "Platz 5"]
+    slotLength: 30
 }
 
 function getBaseTime(date : Date = new Date()) {
@@ -22,34 +21,48 @@ function getTime(datetime : number) {
     return `${date.getHours() < 10 ? "0" : ""}${date.getHours()}:${date.getMinutes() < 10 ? "0" : ""}${date.getMinutes()}`
 }
 
-function getTimeSlots() {
-    let slots = [];
-    // Unix Timestamp of day start
-    const startTime = settings.start * 60 * 60;
+let timetable;
 
-    for(let i = startTime; i < (settings.end * 60 * 60); i+= settings.slotLength * 60) {
+const date = reactive({time: new Date()});
+watch(date, value => {
+    console.log("a", value)
+});
+
+function getTimeSlots() {
+    let minStartTime = 86400;
+    let maxEndTime = 0;
+    for(let court of timetable.courts) {
+        if(court.openTime < minStartTime) {
+            minStartTime = court.openTime;
+        }
+        if(court.closeTime > maxEndTime) {
+            maxEndTime = court.closeTime;
+        }
+    }
+
+    let slots = [];
+    for(let i = minStartTime; i < (maxEndTime); i+= settings.slotLength * 60) {
         slots.push(i);
     }
+
     return slots;
 }
 
-let timetable;
+const slotClassList = (court, slot) => {
+    let classList = {
+        disabled: false
+    };
 
-const date : Ref<Date> = ref(new Date());
-watch(date, async (value) => {
-    timetable = await $fetch("/api/timetable/get", {
-        params: {
-            unixDay: value.getTime() / 1000
-        }});
-});
-
-// TODO: Doesn't work for now. See https://github.com/nuxt/framework/issues/1042
-timetable = await useFetch("/api/timetable/get", {
-    headers: useRequestHeaders(),
-    params: {
-        unixDay: (new Date().setHours(0, 0, 0, 0)) / 1000
+    if(court.openTime > slot) {
+        classList.disabled = true;
     }
-});
+
+    if(court.closeTime <= slot) {
+        classList.disabled = true;
+    }
+
+    return classList;
+}
 </script>
 
 <template>
@@ -59,34 +72,72 @@ timetable = await useFetch("/api/timetable/get", {
                 Buchungskalender
             </h2>
         </div>
-        <div class="content">
-            <div class="calendarNavBar">
-                <DatePicker v-model:date="date" />
+        <div class="content calendarNavigation">
+            <div class="calendarDateNavigation">
+                <DatePicker v-model:date="date" :supports-time="false" />
+            </div>
+            <div class="calendarUserNavigation">
+                Anmelden/registrieren
             </div>
         </div>
+        <TimeTable v-bind:date="date" />
         <div class="content">
             <table class="calendar">
-                <thead>
-                <tr>
-                    <td>Zeit</td>
-                    <td v-for="court in settings.courts">{{court}}</td>
-                </tr>
+                <!--thead>
+                    <tr>
+                        <td class="calendarTime">Zeit</td>
+                        <td v-for="court of timetable.courts">Platz {{court.courtName}}</td>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr v-for="slot in getTimeSlots()">
-                    <td>
-                        {{getTime(getBaseTime() + slot)}}
-                    </td>
-                    <td v-for="court in settings.courts" :data-court-id="court" :data-time="getBaseTime() + slot" class="time-slot">-</td>
-                </tr>
-                </tbody>
+                    <tr v-for="slot in getTimeSlots()">
+                        <td class="calendarTime">
+                            {{getTime(getBaseTime() + slot)}}
+                        </td>
+                        <td v-for="court in timetable.courts"
+                            :data-court-id="court.courtID"
+                            :data-time="getBaseTime() + slot"
+                            :class="slotClassList(court, slot)"
+                            class="time-slot">
+                            <Timeslot :data-court-id="court.courtID"
+                                      :data-time="getBaseTime() + slot" />
+                        </td>
+                    </tr>
+                </tbody-->
             </table>
         </div>
     </div>
 </template>
 
 <style lang="scss">
+.calendarNavigation {
+    @media all and (max-width: 768px) {
+
+    }
+    @media all and (min-width: 769px) {
+        display: grid;
+        grid-template-columns: 300px auto;
+
+        .calendarUserNavigation {
+            justify-self: right;
+        }
+    }
+}
+
+.calendar {
+    width: 100%;
+
+    .calendarTime {
+        width: 70px;
+    }
+}
+
 .time-slot {
     background: #f5f5f5;
+
+    &.disabled {
+        background: none;
+        cursor: not-allowed;
+    }
 }
 </style>

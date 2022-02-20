@@ -21,15 +21,10 @@
             </div>
             <div class="days">
                 <div v-for="i in days" class="day dayName">
-                    <span class="mobile">
-                        {{ i.short }}
-                    </span>
-                    <span class="desktop">
-                        {{ i.name }}
-                    </span>
+                    {{ i.short }}
                 </div>
                 <div v-for="x in dayPadding" class="day dayPadding">
-                    {{ x }}
+
                 </div>
                 <div v-for="i in monthDays"
                      :class="{selected: isSelectedDate(i)}"
@@ -47,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, ref, Ref} from "@vue/reactivity";
+import {computed, ref, Ref, UnwrapNestedRefs} from "@vue/reactivity";
 
 const months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 const days = [{
@@ -73,8 +68,12 @@ const days = [{
     short: "So"
 }];
 
+interface DateObject {
+    time: Date
+}
+
 const props = defineProps<{
-    date: Ref<Date>,
+    date: DateObject,
     supportsTime?: boolean
 }>();
 
@@ -84,15 +83,15 @@ const emits = defineEmits([
 
 let showPicker: Ref<boolean> = ref(false);
 
-let date: Ref<Date> = ref(props.date);
-watch(date, (value) => {
-    console.log("Changed date to " + value);
+let date = reactive(props.date);
+watch(date, value => {
+    console.log("b", value)
 });
-date.value.setHours(12, 0, 0, 0);
+date.time.setHours(12, 0, 0, 0);
 
-let day: Ref<number> = ref(date.value.getDate());
-let month: Ref<number> = ref(date.value.getMonth());
-let year: Ref<number> = ref(date.value.getFullYear());
+let day: Ref<number> = ref(date.time.getDate());
+let month: Ref<number> = ref(date.time.getMonth());
+let year: Ref<number> = ref(date.time.getFullYear());
 
 let time: Ref<string> = ref("12:00");
 
@@ -112,14 +111,20 @@ const togglePicker = (): void => {
 
 const disablePicker = (): void => {
     showPicker.value = false;
+
+    if (!showPicker.value) {
+        day.value = selectedDay.value;
+        month.value = selectedMonth.value;
+        year.value = selectedYear.value;
+    }
 }
 
 watch(time, (value) => {
     let houmin : string[] = value.split(":");
 
-    date.value.setHours(parseInt(houmin[0]), parseInt(houmin[1]));
+    date.time.setHours(parseInt(houmin[0]), parseInt(houmin[1]));
 
-    emits("update:date", date.value);
+    emits("update:date", date);
 });
 
 const monthDays = computed(() => {
@@ -200,12 +205,12 @@ const selectDay = (newDay: number): void => {
     selectedYear.value = year.value;
 
     if(props.supportsTime) {
-        date.value = new Date(selectedYear.value, selectedMonth.value, selectedDay.value, date.value.getHours(), date.value.getMinutes(), 0, 0);
+        date.time = new Date(selectedYear.value, selectedMonth.value, selectedDay.value, date.time.getHours(), date.time.getMinutes(), 0, 0);
     } else {
-        date.value = new Date(selectedYear.value, selectedMonth.value, selectedDay.value, 0, 0, 0, 0);
+        date.time = new Date(selectedYear.value, selectedMonth.value, selectedDay.value, 0, 0, 0, 0);
     }
 
-    emits("update:date", date.value);
+    emits("update:date", date);
 
     disablePicker();
 }
