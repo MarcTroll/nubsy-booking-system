@@ -25,7 +25,7 @@ export default async (req : IncomingMessage, res : ServerResponse) => {
     
     const tmpDay = new Date(query.unixTime);
     
-    const date = new Date(tmpDay.getUTCFullYear(), tmpDay.getUTCMonth(), tmpDay.getUTCDate(), 0, 0, 0, 0);
+    const date = new Date(Date.UTC(tmpDay.getUTCFullYear(), tmpDay.getUTCMonth(), tmpDay.getUTCDate(), 0, 0, 0, 0));
     const dateBaseTime = date.getTime() / 1000;
     
     const connection : PoolConnection = await BookingLib.getDatabase().getConnection();

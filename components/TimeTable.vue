@@ -14,7 +14,10 @@
 
     // Init timetable for today
     let timetable = await $fetch("/api/timetable/get", {
-        headers: useRequestHeaders()
+        headers: useRequestHeaders(),
+        params: {
+            unixTime: dateTime.time
+        }
     });
     timetableRepresentation.grid = timetable.timetableGrid
 

@@ -1,34 +1,41 @@
 <template>
-    <div v-clickaway="disablePicker" class="datePicker">
-        <div class="selectedDate controlCenter">
-            <div class="arrows prev-day" @click="prevDay">&lt;</div>
-            <div class="currentSelection" @click="togglePicker">
-                {{ dayName }}, {{ selectedDay }}. {{ months[selectedMonth] }} {{ selectedYear }}
-            </div>
-            <div class="arrows next-day" @click="nextDay">&gt;</div>
-        </div>
-        <div v-show="showPicker === true" class="dates">
-            <div class="controlCenter month">
-                <div class="arrows prev-month" @click="prevMonth">&lt;</div>
-                <div class="currentSelection">
-                    {{ monthName }}
+    <div class="datePickerContainer">
+        <div v-clickaway="disablePicker" class="datePicker">
+            <div class="selectedDate controlCenter">
+                <div class="arrows prev-day" @click="prevDay">&lt;</div>
+                <div class="currentSelection" @click="togglePicker">
+                    {{ dayName }}, {{ selectedDay }}. {{ months[selectedMonth] }} {{ selectedYear }}
                 </div>
-                <div class="arrows next-month" @click="nextMonth">&gt;</div>
+                <div class="arrows next-day" @click="nextDay">&gt;</div>
             </div>
-            <div class="days">
-                <div v-for="i in days" class="day dayName">
-                    {{ i }}
-                </div>
-                <div v-for="x in dayPadding" class="day dayPadding">
 
+            <div v-show="showPicker === true" class="dates">
+                <div class="controlCenter month">
+                    <div class="arrows prev-month" @click="prevMonth">&lt;</div>
+                    <div class="currentSelection">
+                        {{ monthName }}
+                    </div>
+                    <div class="arrows next-month" @click="nextMonth">&gt;</div>
                 </div>
-                <div v-for="i in monthDays"
-                     :class="{selected: isSelectedDate(i)}"
-                     class="day"
-                     @click="selectDay(i)">
-                    {{ i }}
+                <div class="days">
+                    <div v-for="i in days" class="day dayName">
+                        {{ i }}
+                    </div>
+                    <div v-for="x in dayPadding" class="day dayPadding">
+
+                    </div>
+                    <div v-for="i in monthDays"
+                         :class="{selected: isSelectedDate(i)}"
+                         class="day"
+                         @click="selectDay(i)">
+                        {{ i }}
+                    </div>
                 </div>
             </div>
+        </div>
+
+        <div class="selectToday" @click="selectToday">
+            heute
         </div>
     </div>
 </template>
@@ -168,6 +175,22 @@ const selectDay = (newDay: number): void => {
     disablePicker();
 }
 
+function selectToday() {
+    let today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+
+    unixTime.time = today.getTime() / 1000;
+
+    selectedDay.value = today.getUTCDate();
+    day.value = today.getUTCDate();
+    selectedMonth.value = today.getUTCMonth();
+    month.value = today.getUTCMonth();
+    selectedYear.value = today.getUTCFullYear();
+    year.value = today.getUTCFullYear();
+
+    emits("update:unixTime", unixTime);
+}
+
 const isSelectedDate = (i: number): boolean => {
     return selectedYear.value === year.value
         && selectedMonth.value === month.value
@@ -176,7 +199,27 @@ const isSelectedDate = (i: number): boolean => {
 </script>
 
 <style lang="scss">
+.datePickerContainer {
+    display: flex;
+    flex-wrap: nowrap;
+}
+.selectToday {
+    flex: 0 0 auto;
+    display: flex;
+    height: 40px;
+    align-items: center;
+    margin-left: 20px;
+    padding: 0 10px;
+    box-shadow: 1px 1px 4px rgba(204, 209, 221, 0.5);
+    background-color: #f5f5f5;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #ccd1dd;
+    }
+}
 .datePicker {
+    flex: 1 1 0;
     display: inline-block;
     position: relative;
     width: 100%;

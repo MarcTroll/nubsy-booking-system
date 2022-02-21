@@ -6,11 +6,42 @@
         title: "Buchungskalender"
     });
 
-    const initDate = new Date();
+    const route = useRoute();
+    const router = useRouter();
+
+    let initDate = new Date();
+
+    if(route.query.date) {
+        const dateString = route.query.date.toString().replaceAll("-", "/");
+        initDate = new Date(dateString + " UTC");
+
+        if(initDate.toUTCString() === "Invalid Date") {
+            initDate = new Date();
+        }
+    }
+
     initDate.setUTCHours(0, 0,0, 0);
     let dateTime = initDate.getTime() / 1000;
 
     const timetableOptions = reactive({time: dateTime});
+
+    watch(timetableOptions, (value) => {
+        const date = new Date(value.time * 1000);
+
+        // Is this a good idea?
+        router.replace({
+            path: "/",
+            query: {
+                date: `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1) < 10 ? "0" : ""}${date.getUTCMonth() + 1}-${date.getUTCDate() < 10 ? "0" : ""}${date.getUTCDate()}`
+            }
+        })
+    })
+
+    const authentication = useAuth();
+
+    function toggleAuthentication() {
+        authentication.value.loggedIn = !authentication.value.loggedIn;
+    }
 </script>
 
 <template>
@@ -24,8 +55,11 @@
             <div class="calendarDateNavigation">
                 <DatePicker :unixTime="timetableOptions" />
             </div>
-            <div class="calendarUserNavigation">
+            <div class="calendarUserNavigation" v-if="!authentication.loggedIn" @click="toggleAuthentication">
                 Anmelden/registrieren
+            </div>
+            <div class="calendarUserNavigation" v-if="authentication.loggedIn" @click="toggleAuthentication">
+                Willkommen {{authentication.username}}
             </div>
         </div>
         <div class="content">
@@ -41,7 +75,7 @@
     }
     @media all and (min-width: 769px) {
         display: grid;
-        grid-template-columns: 300px auto;
+        grid-template-columns: 360px auto;
 
         .calendarUserNavigation {
             justify-self: right;
