@@ -1,23 +1,8 @@
 <script lang="ts" setup>
-    import {Ref} from "@vue/reactivity";
-
     let _timer = null;
 
     interface DateTimeObject {
         time: number
-    }
-
-    class TimetableRepresentation {
-
-        timetableGrid: any;
-
-        constructor(timetableGrid) {
-            this.timetableGrid = timetableGrid;
-        }
-
-        getGrid() {
-            return this.timetableGrid;
-        }
     }
 
     const props = defineProps<{
@@ -28,7 +13,6 @@
     let timetableRepresentation = reactive({grid: {}});
 
     // Init timetable for today
-    console.log(dateTime.time)
     let timetable = await $fetch("/api/timetable/get", {
         headers: useRequestHeaders()
     });
@@ -43,7 +27,6 @@
 
         // TODO: set loading to true
 
-        console.log(dateTime.time)
         // Wait 500 milliseconds before request for date changes (e.g. when skipping through dates)
         _timer = setTimeout(async () => {
             timetable = await $fetch("/api/timetable/get", {
@@ -94,10 +77,6 @@
         if(typeof court.reservation === "boolean" && court.reservation) {
             return "ausgebucht";
         }
-    }
-
-    function rerender() {
-        console.log("rerender");
     }
 </script>
 

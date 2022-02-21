@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class="content">
-            <TimeTable v-bind:dateTime="timetableOptions" />
+            <TimeTable :dateTime="timetableOptions" />
         </div>
     </div>
 </template>
