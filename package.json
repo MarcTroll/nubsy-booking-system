@@ -10,6 +10,7 @@
     "nuxt3": "latest"
   },
   "dependencies": {
+    "argon2": "^0.28.4",
     "mysql2": "^2.3.3-rc.0",
     "sass": "^1.43.4"
   }

@@ -1,20 +1,18 @@
 <script lang="ts" setup>
-
+const authentication = useAuth();
 </script>
 
 <template>
     <header class="header">
         <div class="content">
-            <NuxtLink to="/">Kalender</NuxtLink>
-            <NuxtLink to="/settings">Verwaltung</NuxtLink>
-            <NuxtLink to="/me">Profil</NuxtLink>
+            <img src="https://blau-weiss-stolberg.de/images/style-2/pageLogo-d28c2d75.svg" height="80px">
         </div>
     </header>
 </template>
 
 <style lang="scss">
     .header {
-        background: #055B84;
+        background: #005a91;
         padding: 30px 0;
 
         .content {
