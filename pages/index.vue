@@ -8,18 +8,9 @@
 
     const initDate = new Date();
     initDate.setUTCHours(0, 0,0, 0);
+    let dateTime = initDate.getTime() / 1000;
 
-    const dateTime = ref(initDate.getTime() / 1000);
-
-    watch(dateTime, value => {
-        console.log("index > value changed:", value)
-    })
-
-    const updateUnixTime = () => {
-        console.log("index > fun updateUnixTime:", dateTime.value)
-    }
-
-    const date = reactive({time: initDate});
+    const timetableOptions = reactive({time: dateTime});
 </script>
 
 <template>
@@ -31,15 +22,14 @@
         </div>
         <div class="content calendarNavigation">
             <div class="calendarDateNavigation">
-                <!--DatePickerO v-model:date="date" :supports-time="false" /-->
-                <DatePicker :unixTime="dateTime" @update:unixTime="updateUnixTime()" />
+                <DatePicker :unixTime="timetableOptions" />
             </div>
             <div class="calendarUserNavigation">
                 Anmelden/registrieren
             </div>
         </div>
         <div class="content">
-            <TimeTable v-bind:date="date" />
+            <TimeTable v-bind:dateTime="timetableOptions" />
         </div>
     </div>
 </template>

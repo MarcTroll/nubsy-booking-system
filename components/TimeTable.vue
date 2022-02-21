@@ -1,8 +1,10 @@
 <script lang="ts" setup>
+    import {Ref} from "@vue/reactivity";
+
     let _timer = null;
 
-    interface DateObject {
-        time: Date
+    interface DateTimeObject {
+        time: number
     }
 
     class TimetableRepresentation {
@@ -19,20 +21,21 @@
     }
 
     const props = defineProps<{
-        date: DateObject
+        dateTime: DateTimeObject
     }>();
-    let tableDate = reactive(props.date);
+    let dateTime = reactive(props.dateTime);
     let loading = ref(false);
     let timetableRepresentation = reactive({grid: {}});
 
     // Init timetable for today
+    console.log(dateTime.time)
     let timetable = await $fetch("/api/timetable/get", {
         headers: useRequestHeaders()
     });
     timetableRepresentation.grid = timetable.timetableGrid
 
     // Update timetable when changing the date
-    watch(tableDate, (value) => {
+    watch(dateTime, () => {
         if(_timer !== null) {
             clearTimeout(_timer);
             _timer = null;
@@ -40,11 +43,12 @@
 
         // TODO: set loading to true
 
+        console.log(dateTime.time)
         // Wait 500 milliseconds before request for date changes (e.g. when skipping through dates)
         _timer = setTimeout(async () => {
             timetable = await $fetch("/api/timetable/get", {
                 params: {
-                    unixTime: value.time.getTime() / 1000
+                    unixTime: dateTime.time
                 }});
             timetableRepresentation.grid = timetable.timetableGrid
 

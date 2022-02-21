@@ -36,24 +36,23 @@
 <script lang="ts" setup>
 import {computed, ref, Ref} from "@vue/reactivity";
 
+interface DateTimeObject {
+    time: number
+}
+
 const months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 const days = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
 
 const props = defineProps<{
-    unixTime: Ref<number>
+    unixTime: DateTimeObject
 }>();
-let unixTime = ref(props.unixTime);
-
-watch(unixTime, (value) => {
-    console.log("DatePicker > value changed", value)
-})
-
 const emits = defineEmits([
     "update:unixTime"
 ]);
+let unixTime = reactive(props.unixTime);
 
 let date = computed(() => {
-    return new Date(unixTime.value * 1000);
+    return new Date(unixTime.time * 1000);
 });
 let showPicker: Ref<boolean> = ref(false);
 
@@ -162,7 +161,7 @@ const selectDay = (newDay: number): void => {
     selectedMonth.value = month.value;
     selectedYear.value = year.value;
 
-    unixTime.value = new Date(selectedYear.value, selectedMonth.value, selectedDay.value, 0, 0, 0, 0).getTime() / 1000;
+    unixTime.time = new Date(Date.UTC(selectedYear.value, selectedMonth.value, selectedDay.value, 0, 0, 0, 0)).getTime() / 1000;
 
     emits("update:unixTime", unixTime);
 
