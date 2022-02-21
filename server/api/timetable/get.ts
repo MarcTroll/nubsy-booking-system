@@ -38,8 +38,6 @@ export default async (req : IncomingMessage, res : ServerResponse) => {
     ]);
     await connection.release();
     
-    console.log("Building timetable for", date.toDateString())
-    
     let timetableGrid = {};
     let timetableBoundaries = CourtUtil.getDayBoundaries(<[{openTime: number; closeTime: number}]>courts, dateBaseTime);
     

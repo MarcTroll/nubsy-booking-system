@@ -1,9 +1,13 @@
+<script lang="ts" setup>
+
+</script>
+
 <template>
     <header class="header">
         <div class="content">
             <NuxtLink to="/">Kalender</NuxtLink>
             <NuxtLink to="/settings">Verwaltung</NuxtLink>
-            <NuxtLink to="/user">Profil</NuxtLink>
+            <NuxtLink to="/me">Profil</NuxtLink>
         </div>
     </header>
 </template>
