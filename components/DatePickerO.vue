@@ -3,7 +3,11 @@
         <div class="selectedDate controlCenter">
             <div class="arrows prev-day" @click="prevDay">&lt;</div>
             <div class="currentSelection" @click="togglePicker">
-                {{ dayName }}, {{ selectedDay }}. {{ months[selectedMonth] }} {{ selectedYear }}
+                {{ dayName.name }}, {{ selectedDay }}. {{ months[selectedMonth] }} {{ selectedYear }}
+
+                <span v-if="supportsTime">
+                    , {{time}} Uhr
+                </span>
             </div>
             <div class="arrows next-day" @click="nextDay">&gt;</div>
         </div>
@@ -17,7 +21,7 @@
             </div>
             <div class="days">
                 <div v-for="i in days" class="day dayName">
-                    {{ i }}
+                    {{ i.short }}
                 </div>
                 <div v-for="x in dayPadding" class="day dayPadding">
 
@@ -29,6 +33,10 @@
                     {{ i }}
                 </div>
             </div>
+            <div class="time" v-if="supportsTime">
+                Uhrzeit:
+                <input type="time" v-model="time">
+            </div>
         </div>
     </div>
 </template>
@@ -37,29 +45,52 @@
 import {computed, ref, Ref} from "@vue/reactivity";
 
 const months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
-const days = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
+const days = [{
+    name: "Montag",
+    short: "Mo"
+}, {
+    name: "Dienstag",
+    short: "Di"
+}, {
+    name: "Mittwoch",
+    short: "Mi"
+}, {
+    name: "Donnerstag",
+    short: "Do"
+}, {
+    name: "Freitag",
+    short: "Fr"
+}, {
+    name: "Samstag",
+    short: "Sa"
+}, {
+    name: "Sonntag",
+    short: "So"
+}];
+
+interface DateObject {
+    time: Date
+}
 
 const props = defineProps<{
-    unixTime: Ref<number>
+    date: DateObject,
+    supportsTime?: boolean
 }>();
-let unixTime = ref(props.unixTime);
-
-watch(unixTime, (value) => {
-    console.log("DatePicker > value changed", value)
-})
 
 const emits = defineEmits([
-    "update:unixTime"
-]);
+    "update:date"
+])
 
-let date = computed(() => {
-    return new Date(unixTime.value * 1000);
-});
 let showPicker: Ref<boolean> = ref(false);
 
-let day: Ref<number> = ref(date.value.getUTCDate());
-let month: Ref<number> = ref(date.value.getUTCMonth());
-let year: Ref<number> = ref(date.value.getUTCFullYear());
+let date = reactive(props.date);
+date.time.setHours(0, 0, 0, 0);
+
+let day: Ref<number> = ref(date.time.getDate());
+let month: Ref<number> = ref(date.time.getMonth());
+let year: Ref<number> = ref(date.time.getFullYear());
+
+let time: Ref<string> = ref("12:00");
 
 let selectedDay: Ref<number> = ref(day.value);
 let selectedMonth: Ref<number> = ref(month.value);
@@ -85,6 +116,14 @@ const disablePicker = (): void => {
     }
 }
 
+watch(time, (value) => {
+    let houmin : string[] = value.split(":");
+
+    date.time.setHours(parseInt(houmin[0]), parseInt(houmin[1]));
+
+    emits("update:date", date);
+});
+
 const monthDays = computed(() => {
     if (month.value === 1) {
         if(year.value % 4 === 0) {
@@ -108,12 +147,12 @@ const monthDays = computed(() => {
 
 const dayPadding = computed(() => {
     let tempDate = new Date(`${year.value}-${month.value + 1}-01`);
-    return (tempDate.getUTCDay() + 6) % 7;
+    return (tempDate.getDay() + 6) % 7;
 });
 
 const dayName = computed(() => {
     let tempDate = new Date(`${selectedYear.value}-${selectedMonth.value + 1}-${selectedDay.value}`);
-    return days[tempDate.getUTCDay()];
+    return days[(tempDate.getDay() + 6) % 7];
 });
 
 const monthName = computed(() => {
@@ -162,9 +201,13 @@ const selectDay = (newDay: number): void => {
     selectedMonth.value = month.value;
     selectedYear.value = year.value;
 
-    unixTime.value = new Date(selectedYear.value, selectedMonth.value, selectedDay.value, 0, 0, 0, 0).getTime() / 1000;
+    if(props.supportsTime) {
+        date.time = new Date(selectedYear.value, selectedMonth.value, selectedDay.value, date.time.getHours(), date.time.getMinutes(), 0, 0);
+    } else {
+        date.time = new Date(selectedYear.value, selectedMonth.value, selectedDay.value, 0, 0, 0, 0);
+    }
 
-    emits("update:unixTime", unixTime);
+    emits("update:date", date);
 
     disablePicker();
 }

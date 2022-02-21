@@ -5,16 +5,31 @@
         time: Date
     }
 
+    class TimetableRepresentation {
+
+        timetableGrid: any;
+
+        constructor(timetableGrid) {
+            this.timetableGrid = timetableGrid;
+        }
+
+        getGrid() {
+            return this.timetableGrid;
+        }
+    }
+
     const props = defineProps<{
         date: DateObject
     }>();
     let tableDate = reactive(props.date);
     let loading = ref(false);
+    let timetableRepresentation = reactive({grid: {}});
 
     // Init timetable for today
     let timetable = await $fetch("/api/timetable/get", {
         headers: useRequestHeaders()
     });
+    timetableRepresentation.grid = timetable.timetableGrid
 
     // Update timetable when changing the date
     watch(tableDate, (value) => {
@@ -31,6 +46,7 @@
                 params: {
                     unixTime: value.time.getTime() / 1000
                 }});
+            timetableRepresentation.grid = timetable.timetableGrid
 
             _timer = null;
         }, 500);
@@ -91,7 +107,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(slot, slotIndex) in timetable.timetableGrid" :key="slot.timeID">
+                <tr v-for="(slot, slotIndex) in timetableRepresentation.grid" :key="slot.timeID">
                     <td class="calendarTime">
                         {{getTime(slotIndex)}}
                     </td>
@@ -124,5 +140,9 @@
 
 .calendar .hideCourtSlot {
     display: none;
+}
+
+.calendar tbody > tr:nth-child(2n) > .calendarTime {
+    color: #b1b1b1;
 }
 </style>

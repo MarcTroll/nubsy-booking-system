@@ -39,22 +39,26 @@ export default async (req : IncomingMessage, res : ServerResponse) => {
     await connection.release();
     
     console.log("Building timetable for", date.toDateString())
-    console.log(courts)
     
     let timetableGrid = {};
     let timetableBoundaries = CourtUtil.getDayBoundaries(<[{openTime: number; closeTime: number}]>courts, dateBaseTime);
     
-    console.log(timetableBoundaries)
     for(let timeSlot = timetableBoundaries.minStartTime; timeSlot < timetableBoundaries.maxEndTime; timeSlot += 30*60) {
         timetableGrid[timeSlot] = {
             timeID: timeSlot,
             courts: {}
         };
         for (let court of courts) {
+            timetableGrid[timeSlot].courts[court.courtID] = {
+                courtID: court.courtID
+            }
             // court not opened yet
             if(timeSlot < dateBaseTime + court.openTime) {
-                timetableGrid[timeSlot].courts[court.courtID] = {
-                    closed: true
+                if(timetableBoundaries.minStartTime === timeSlot) {
+                    timetableGrid[timeSlot].courts[court.courtID].closed = true;
+                    timetableGrid[timeSlot].courts[court.courtID].rowspan = ((dateBaseTime + court.openTime) - timetableBoundaries.minStartTime) / slotLength;
+                } else {
+                    timetableGrid[timeSlot].courts[court.courtID].display = false;
                 }
                 
                 continue;
@@ -62,8 +66,11 @@ export default async (req : IncomingMessage, res : ServerResponse) => {
     
             // court already closed
             if(timeSlot >= dateBaseTime + court.closeTime) {
-                timetableGrid[timeSlot].courts[court.courtID] = {
-                    closed: true
+                if(dateBaseTime + court.closeTime === timeSlot) {
+                    timetableGrid[timeSlot].courts[court.courtID].closed = true;
+                    timetableGrid[timeSlot].courts[court.courtID].rowspan = (timetableBoundaries.maxEndTime - (dateBaseTime + court.closeTime)) / slotLength;
+                } else {
+                    timetableGrid[timeSlot].courts[court.courtID].display = false;
                 }
         
                 continue;
@@ -76,23 +83,17 @@ export default async (req : IncomingMessage, res : ServerResponse) => {
                 let reservation = filterReservation[0];
                 
                 if(reservation.startTime === timeSlot) {
-                    timetableGrid[timeSlot].courts[court.courtID] = {
-                        reservation: true,
-                        rowspan: (reservation.endTime - reservation.startTime) / slotLength
-                    }
+                    timetableGrid[timeSlot].courts[court.courtID].reservation = true;
+                    timetableGrid[timeSlot].courts[court.courtID].rowspan = (reservation.endTime - reservation.startTime) / slotLength;
                 } else {
-                    timetableGrid[timeSlot].courts[court.courtID] = {
-                        reservation: true,
-                        display: false
-                    }
+                    timetableGrid[timeSlot].courts[court.courtID].reservation = true;
+                    timetableGrid[timeSlot].courts[court.courtID].display = false;
                 }
                 continue;
             }
             
             if(!timetableGrid[timeSlot].courts[court.courtID]) {
-                timetableGrid[timeSlot].courts[court.courtID] = {
-                    display: true
-                }
+                timetableGrid[timeSlot].courts[court.courtID].display = true;
             }
         }
     }

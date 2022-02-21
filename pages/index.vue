@@ -1,15 +1,25 @@
 <script setup lang="ts">
-import DatePicker from "~/components/DatePicker.vue";
-import TimeTable from "~/components/TimeTable.vue";
+    import TimeTable from "~/components/TimeTable.vue";
+    import DatePicker from "~/components/DatePicker.vue";
 
-useMeta({
-    title: "Buchungskalender"
-});
+    useMeta({
+        title: "Buchungskalender"
+    });
 
-const initDate = new Date();
-initDate.setHours(0, 0,0, 0);
+    const initDate = new Date();
+    initDate.setUTCHours(0, 0,0, 0);
 
-const date = reactive({time: initDate});
+    const dateTime = ref(initDate.getTime() / 1000);
+
+    watch(dateTime, value => {
+        console.log("index > value changed:", value)
+    })
+
+    const updateUnixTime = () => {
+        console.log("index > fun updateUnixTime:", dateTime.value)
+    }
+
+    const date = reactive({time: initDate});
 </script>
 
 <template>
@@ -21,7 +31,8 @@ const date = reactive({time: initDate});
         </div>
         <div class="content calendarNavigation">
             <div class="calendarDateNavigation">
-                <DatePicker v-model:date="date" :supports-time="false" />
+                <!--DatePickerO v-model:date="date" :supports-time="false" /-->
+                <DatePicker :unixTime="dateTime" @update:unixTime="updateUnixTime()" />
             </div>
             <div class="calendarUserNavigation">
                 Anmelden/registrieren
