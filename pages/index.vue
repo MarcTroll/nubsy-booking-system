@@ -52,14 +52,16 @@
             </h2>
         </div>
         <div class="content calendarNavigation">
+            <div class="calendarUserNavigation">
+                <NuxtLink to="/login" v-if="!authentication.loggedIn">
+                    Anmelden, um Plätze zu buchen!
+                </NuxtLink>
+                <span v-if="authentication.loggedIn">
+                    Willkommen, {{authentication.user.name}}
+                </span>
+            </div>
             <div class="calendarDateNavigation">
                 <DatePicker :unixTime="timetableOptions" />
-            </div>
-            <div class="calendarUserNavigation" v-if="!authentication.loggedIn" @click="toggleAuthentication">
-                Anmelden/registrieren
-            </div>
-            <div class="calendarUserNavigation" v-if="authentication.loggedIn" @click="toggleAuthentication">
-                Willkommen {{authentication.username}}
             </div>
         </div>
         <div class="content">
@@ -76,9 +78,21 @@
     @media all and (min-width: 769px) {
         display: grid;
         grid-template-columns: 360px auto;
+        grid-column-gap: 20px;
+        align-items: center;
 
+        .calendarDateNavigation, .calendarUserNavigation {
+            grid-row: 1;
+        }
+
+        .calendarDateNavigation {
+            grid-column-start: 1;
+            grid-column-end: 2;
+        }
         .calendarUserNavigation {
-            justify-self: right;
+            grid-column-start: 2;
+            grid-column-end: 3;
+            justify-self: end;
         }
     }
 }
