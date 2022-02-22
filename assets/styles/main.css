@@ -59,7 +59,7 @@ html, body {
 }
 
 a {
-  color: #0c81de;
+  color: #005a91;
   text-decoration: none;
 }
 
@@ -107,6 +107,62 @@ p {
   font-size: 14px;
   font-weight: 500;
   text-transform: uppercase;
+  background: white;
+  padding: 10px 20px;
+  border: 1px solid #005a91;
+  color: #005a91;
+  cursor: pointer;
+}
+.button:not(:first-child) {
+  margin-left: 20px;
+}
+.button:hover {
+  background: #f2f2f2;
+}
+.button.primary {
+  background: #005a91;
+  color: white;
+}
+.button.primary:hover {
+  background: #004a78;
+}
+
+.message {
+  padding: 10px 20px;
+  border: 1px solid;
+  border-left-width: 5px;
+}
+.message a {
+  font-weight: 500;
+}
+.message.information {
+  border-color: #005a91;
+}
+
+.grid {
+  display: grid;
+}
+.grid.grid-2 {
+  grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+  grid-column-gap: 20px;
+}
+.grid.stretch {
+  justify-items: stretch;
+  align-items: stretch;
+}
+
+form .formInputContainer label, form .formInputContainer input {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+}
+form input {
+  padding: 10px 20px;
+  outline: none;
+  border: 1px solid #b1b1b1;
+}
+form input:focus {
+  border-color: #005a91;
 }
 
 /*# sourceMappingURL=main.css.map */

@@ -1,11 +1,13 @@
 <script lang="ts" setup>
-const authentication = useAuth();
+
 </script>
 
 <template>
     <header class="header">
         <div class="content">
-            <img src="https://blau-weiss-stolberg.de/images/style-2/pageLogo-d28c2d75.svg" height="80px">
+            <NuxtLink to="/">
+                <img src="https://blau-weiss-stolberg.de/images/style-2/pageLogo-d28c2d75.svg" height="80px">
+            </NuxtLink>
         </div>
     </header>
 </template>

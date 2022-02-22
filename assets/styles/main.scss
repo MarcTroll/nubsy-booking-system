@@ -1,13 +1,17 @@
 @import url(https://fonts.googleapis.com/icon?family=Material+Icons);
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap');
 
-$primary-color: #236FA8;
+$primary-color: #005a91;
 $primary-color-light: lighten($primary-color, 15%);
+$primary-color-dark: darken($primary-color, 5%);
+
+$white: #ffffff;
+$white-dark: darken($white, 5%);
 
 $secondary-color: #262e3e;
 $success-color: #388E3C;
 $error-color: #D32F2F;
-$link-color: #0c81de;
+$link-color: #005a91;
 
 $small-screen: 600px;
 $small-screen-up: 601px;
@@ -121,4 +125,74 @@ p {
   font-size: 14px;
   font-weight: 500;
   text-transform: uppercase;
+  background: white;
+  padding: 10px 20px;
+  border: 1px solid $primary-color;
+  color: $primary-color;
+  cursor: pointer;
+
+  &:not(:first-child) {
+    margin-left: 20px;
+  }
+
+  &:hover {
+    background: $white-dark;
+  }
+
+  &.primary {
+    background: $primary-color;
+    color: white;
+
+    &:hover {
+      background: $primary-color-dark;
+    }
+  }
+}
+
+.message {
+  padding: 10px 20px;
+  border: 1px solid;
+  border-left-width: 5px;
+
+  a {
+    font-weight: 500;
+  }
+
+  &.information {
+    border-color: #005a91;
+  }
+}
+
+.grid {
+  display: grid;
+
+  &.grid-2 {
+    grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+    grid-column-gap: 20px;
+  }
+
+  &.stretch {
+    justify-items: stretch;
+    align-items: stretch;
+  }
+}
+
+form {
+  .formInputContainer {
+    label, input {
+      display: block;
+      box-sizing: border-box;
+      width: 100%;
+    }
+  }
+
+  input {
+    padding: 10px 20px;
+    outline: none;
+    border: 1px solid #b1b1b1;
+
+    &:focus {
+      border-color: $primary-color;
+    }
+  }
 }
