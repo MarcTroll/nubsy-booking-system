@@ -2,12 +2,11 @@
     import TimeTable from "~/components/TimeTable.vue";
     import DatePicker from "~/components/DatePicker.vue";
 
-    useMeta({
-        title: "Buchungskalender"
-    });
-
     const route = useRoute();
     const router = useRouter();
+
+    useTitle("Kalender");
+    useDescription("Description");
 
     let initDate = new Date();
 

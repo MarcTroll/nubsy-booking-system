@@ -1,7 +1,5 @@
 <script lang="ts" setup>
-    useMeta({
-        title: "Anmelden - nubsy"
-    });
+    useTitle("Anmelden");
 
     const loginForm = {
         emailAddress: ""
@@ -39,7 +37,7 @@
                     </div>
                 </div>
             </div>
-            <div class="content">
+            <div class="content formSubmit">
                 <input class="button primary" type="submit" value="Anmelden">
                 <NuxtLink to="/login" class="button">Passwort vergessen</NuxtLink>
             </div>

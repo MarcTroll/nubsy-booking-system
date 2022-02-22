@@ -156,6 +156,9 @@ form .formInputContainer label, form .formInputContainer input {
   box-sizing: border-box;
   width: 100%;
 }
+form .formSubmit {
+  text-align: center;
+}
 form input {
   padding: 10px 20px;
   outline: none;
