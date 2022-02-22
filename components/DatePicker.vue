@@ -181,12 +181,12 @@ function selectToday() {
 
     unixTime.time = today.getTime() / 1000;
 
-    selectedDay.value = today.getUTCDate();
-    day.value = today.getUTCDate();
-    selectedMonth.value = today.getUTCMonth();
-    month.value = today.getUTCMonth();
-    selectedYear.value = today.getUTCFullYear();
-    year.value = today.getUTCFullYear();
+    selectedDay.value = today.getDate();
+    day.value = today.getDate();
+    selectedMonth.value = today.getMonth();
+    month.value = today.getMonth();
+    selectedYear.value = today.getFullYear();
+    year.value = today.getFullYear();
 
     emits("update:unixTime", unixTime);
 }
