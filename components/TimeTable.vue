@@ -44,7 +44,7 @@
 
     function getTime(slotTime: number) {
         let date = new Date(slotTime * 1000)
-        return `${date.getHours() < 10 ? "0" : ""}${date.getHours()}:${date.getMinutes() < 10 ? "0" : ""}${date.getMinutes()}`
+        return `${date.getUTCHours() < 10 ? "0" : ""}${date.getUTCHours()}:${date.getUTCMinutes() < 10 ? "0" : ""}${date.getUTCMinutes()}`
     }
 
     const slotClassList = (court) => {
