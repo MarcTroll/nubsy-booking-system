@@ -31,7 +31,7 @@
         router.replace({
             path: "/",
             query: {
-                date: `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1) < 10 ? "0" : ""}${date.getUTCMonth() + 1}-${date.getUTCDate() < 10 ? "0" : ""}${date.getUTCDate()}`
+                date: `${date.getFullYear()}-${(date.getMonth() + 1) < 10 ? "0" : ""}${date.getMonth() + 1}-${date.getDate() < 10 ? "0" : ""}${date.getDate()}`
             }
         })
     })

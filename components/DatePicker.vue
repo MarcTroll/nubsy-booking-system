@@ -177,9 +177,7 @@ const selectDay = (newDay: number): void => {
 
 function selectToday() {
     let today = new Date();
-    today.setUTCHours(0, 0, 0, 0);
-
-    unixTime.time = today.getTime() / 1000;
+    today.setHours(0, 0, 0, 0)
 
     selectedDay.value = today.getDate();
     day.value = today.getDate();
@@ -188,6 +186,7 @@ function selectToday() {
     selectedYear.value = today.getFullYear();
     year.value = today.getFullYear();
 
+    unixTime.time = today.getTime() / 1000;
     emits("update:unixTime", unixTime);
 }
 
