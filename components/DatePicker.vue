@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <div class="selectToday" @click="selectToday">
+        <div class="selectToday button" @click="selectToday">
             heute
         </div>
     </div>
@@ -206,17 +206,8 @@ const isSelectedDate = (i: number): boolean => {
 .selectToday {
     flex: 0 0 auto;
     display: flex;
-    height: 40px;
     align-items: center;
     margin-left: 20px;
-    padding: 0 10px;
-    box-shadow: 1px 1px 4px rgba(204, 209, 221, 0.5);
-    background-color: #f5f5f5;
-    cursor: pointer;
-
-    &:hover {
-        background-color: #ccd1dd;
-    }
 }
 .datePicker {
     flex: 1 1 0;
@@ -224,7 +215,6 @@ const isSelectedDate = (i: number): boolean => {
     position: relative;
     width: 100%;
     height: 100%;
-    box-shadow: 1px 1px 4px rgba(204, 209, 221, 0.5);
 
     .controlCenter {
         display: flex;
@@ -237,13 +227,14 @@ const isSelectedDate = (i: number): boolean => {
 
         > .currentSelection {
             width: 100%;
-            height: 40px;
+            padding: 10px 0;
             display: flex;
             justify-content: center;
             align-items: center;
+            border: 1px solid #005a91;
 
             &:hover {
-                background-color: #ccd1dd;
+                background-color: darken(white, 5%);
             }
         }
 
@@ -254,16 +245,16 @@ const isSelectedDate = (i: number): boolean => {
             @media screen and (min-width: 769px) {
                 width: 45px;
             }
-            height: 40px;
+            border: 1px solid #005a91;
+            padding: 10px 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #313131;
-            background-color: #f5f5f5;
-            font-size: 20px;
+            color: white;
+            background-color: #005a91;
 
             &:hover {
-                background-color: #ccd1dd;
+                background-color: darken(#005a91, 5%);
             }
         }
     }
@@ -313,7 +304,7 @@ const isSelectedDate = (i: number): boolean => {
 
                 &.selected {
                     color: #fff;
-                    background-color: #0c81de;
+                    background-color: #005a91;
                 }
             }
         }

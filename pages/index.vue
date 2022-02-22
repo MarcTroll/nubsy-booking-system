@@ -52,7 +52,7 @@
         </div>
         <div class="content calendarNavigation">
             <div class="calendarUserNavigation">
-                <NuxtLink to="/login" v-if="!authentication.loggedIn">
+                <NuxtLink to="/login" class="button" v-if="!authentication.loggedIn">
                     Anmelden, um Plätze zu buchen!
                 </NuxtLink>
                 <span v-if="authentication.loggedIn">
@@ -101,15 +101,6 @@
 
     .calendarTime {
         width: 70px;
-    }
-}
-
-.time-slot {
-    background: #f5f5f5;
-
-    &.disabled {
-        background: none;
-        cursor: not-allowed;
     }
 }
 </style>

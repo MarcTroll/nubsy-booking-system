@@ -29,6 +29,7 @@
         }
 
         // TODO: set loading to true
+        loading.value = true;
 
         // Wait 500 milliseconds before request for date changes (e.g. when skipping through dates)
         _timer = setTimeout(async () => {
@@ -36,10 +37,11 @@
                 params: {
                     unixTime: dateTime.time
                 }});
-            timetableRepresentation.grid = timetable.timetableGrid
+            timetableRepresentation.grid = timetable.timetableGrid;
+            loading.value = false;
 
             _timer = null;
-        }, 500);
+        }, 750);
     });
 
     function getTime(slotTime: number) {
@@ -49,21 +51,11 @@
 
     const slotClassList = (court) => {
         let classList = {
-            courtClosed: false,
-            hideCourtSlot: false,
-            courtReservation: false
+            hideCourtSlot: false
         };
-
-        if(typeof court.closed === "boolean") {
-            classList.courtClosed = court.closed;
-        }
 
         if(typeof court.display === "boolean") {
             classList.hideCourtSlot = !court.display;
-        }
-
-        if(typeof court.reservation === "boolean") {
-            classList.courtReservation = court.reservation;
         }
 
         return classList;
@@ -72,27 +64,31 @@
     function getRowspan(court) {
         return court.rowspan || 1;
     }
-
-    function getCourtDescription(court) {
-        if(typeof court.closed === "boolean" && court.closed) {
-            return "gesperrt";
-        }
-        if(typeof court.reservation === "boolean" && court.reservation) {
-            return "ausgebucht";
-        }
-    }
 </script>
 
 <template>
     <div>
-        <table class="calendar" v-if="!loading">
-            <thead>
+        <div class="loaderContainer">
+            <div class="loaderOverlay" v-if="loading">
+                <div class="loader"></div>
+            </div>
+
+            <table class="calendar">
+                <thead>
                 <tr>
-                    <td class="calendarTime">Zeit</td>
-                    <td v-for="court of timetable.courts">Platz {{court.courtName}}</td>
+                    <td class="calendarTime">
+                        <span>
+                            Zeit
+                        </span>
+                    </td>
+                    <td v-for="court of timetable.courts">
+                        <span>
+                            Platz {{court.courtName}}
+                        </span>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 <tr v-for="(slot, slotIndex) in timetableRepresentation.grid" :key="slot.timeID">
                     <td class="calendarTime">
                         {{getTime(slotIndex)}}
@@ -101,34 +97,35 @@
                         :data-court-id="1"
                         :data-time="slotIndex"
                         :rowspan="getRowspan(court)"
-                        :class="slotClassList(court)"
-                        class="time-slot">
-                        {{getCourtDescription(court)}}
+                        :class="slotClassList(court)">
+                        <TimeSlot :court="court" />
                     </td>
                 </tr>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
-<style>
+<style lang="scss">
 .calendar {
     table-layout: fixed;
-}
-
-.calendar .courtClosed {
-    background: rgba(255, 0, 0, 0.2);
-}
-
-.calendar .courtReservation {
-    background: rgba(0, 128, 0, 0.2);
 }
 
 .calendar .hideCourtSlot {
     display: none;
 }
 
-.calendar tbody > tr:nth-child(2n) > .calendarTime {
-    color: #b1b1b1;
+.calendar tbody {
+    > tr:nth-child(2n) > .calendarTime {
+        color: #b1b1b1;
+    }
+
+    tr {
+        td {
+            padding: 5px;
+            height: 1px;
+        }
+    }
 }
 </style>

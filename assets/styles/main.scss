@@ -124,7 +124,6 @@ p {
 .button {
   font-size: 14px;
   font-weight: 500;
-  text-transform: uppercase;
   background: white;
   padding: 10px 20px;
   border: 1px solid $primary-color;
@@ -198,5 +197,78 @@ form {
     &:focus {
       border-color: $primary-color;
     }
+  }
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0 0;
+
+  thead {
+    color: $primary-color;
+    font-weight: 500;
+    > tr {
+      > td {
+        border-bottom: 1px solid $primary-color;
+        border-collapse: separate;
+        border-spacing: 5px 5px;
+
+        > span {
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+  tbody {
+    > tr {
+      > td {
+        border-collapse: separate;
+        border-spacing: 5px 5px;
+        border-bottom: 1px solid #eeeeee;
+      }
+    }
+  }
+  tr {
+    td {
+      &:not(:last-child) {
+        border-right: 1px solid $primary-color;
+      }
+    }
+  }
+}
+
+.loaderContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  .loaderOverlay {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.7);
+    width: inherit;
+    height: inherit;
+
+    .loader {
+      background: rgba(255, 255, 255, 0.7);
+      width: 64px;
+      height: 64px;
+      display: inline-block;
+      border-radius: 50%;
+      border-top: 3px solid $primary-color;
+      border-right: 3px solid transparent;
+      top: 100px;
+      left: calc(50% - 32px);
+      box-sizing: border-box;
+      position: absolute;
+      animation: rotation 1s linear infinite;
+    }
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
