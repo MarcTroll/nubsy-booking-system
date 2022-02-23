@@ -15,9 +15,9 @@ if(res.status === "success") {
     authentication.value.user = res.user;
 
     if(!authentication.value.user.name) {
-        if(!route.path.startsWith("/me/accounts")) {
+        if(!route.path.startsWith("/my/accounts")) {
             await router.replace({
-                path: "/me/accounts"
+                path: "/my/accounts"
             });
         }
     }
@@ -25,9 +25,9 @@ if(res.status === "success") {
 
 watch(route, async (newRoute) => {
     if(authentication.value.loggedIn && !authentication.value.user.name) {
-        if(!newRoute.path.startsWith("/me/accounts")) {
+        if(!newRoute.path.startsWith("/my/accounts")) {
             await router.replace({
-                path: "/me/accounts"
+                path: "/my/accounts"
             });
         }
     }

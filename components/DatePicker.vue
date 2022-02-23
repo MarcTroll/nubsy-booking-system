@@ -114,7 +114,7 @@ const monthDays = computed(() => {
 
 const dayPadding = computed(() => {
     let tempDate = new Date(`${year.value}-${month.value + 1}-01`);
-    return (tempDate.getUTCDay() + 6) % 7;
+    return (tempDate.getUTCDay());
 });
 
 const dayName = computed(() => {
@@ -266,6 +266,7 @@ const isSelectedDate = (i: number): boolean => {
     > .dates {
         display: block;
         position: absolute;
+        z-index: 1000;
         top: 0;
         left: 0;
         right: 0;

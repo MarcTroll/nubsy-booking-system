@@ -56,11 +56,11 @@
                     Anmelden, um Plätze zu buchen!
                 </NuxtLink>
                 <span v-if="authentication.loggedIn">
-                    Angemeldet als <strong>{{authentication.user.name}}</strong>
-                    <NuxtLink to="/me" class="button">
-                        Profil
+                    <span class="userWelcome">Willkommen, <strong>{{authentication.user.name}}</strong></span>
+                    <NuxtLink to="/my" class="button">
+                        Konto
                     </NuxtLink>
-                    <NuxtLink to="/me" class="button">
+                    <NuxtLink to="/my" class="button">
                         Administration
                     </NuxtLink>
                 </span>
@@ -78,11 +78,22 @@
 <style lang="scss">
 .calendarNavigation {
     @media all and (max-width: 768px) {
-
+        .calendarUserNavigation {
+            .userWelcome {
+                display: block;
+                margin-bottom: 20px;
+            }
+        }
     }
-    @media all and (min-width: 769px) {
+    @media all and  (max-width: 1100px) {
+        .calendarUserNavigation {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    }
+    @media all and (min-width: 1101px) {
         display: grid;
-        grid-template-columns: 360px auto;
+        grid-template-columns: 350px auto;
         grid-column-gap: 20px;
         align-items: center;
 
