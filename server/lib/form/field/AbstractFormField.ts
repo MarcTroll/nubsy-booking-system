@@ -18,7 +18,7 @@ export abstract class AbstractFormField<T> {
         return this.required;
     }
     
-    setValue(value : T) : AbstractFormField<T> {
+    setValue(value : T) {
         this.value = value;
         
         return this;

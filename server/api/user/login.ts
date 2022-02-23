@@ -29,11 +29,13 @@ export default async (req: IncomingMessage, res: ServerResponse) => {
         .addFormField(
             "emailAddress",
             new EMailFormField(body.emailAddress)
+                .setMaxLength(256)
                 .setRequired(true)
         )
         .addFormField(
             "password",
             new PasswordFormField(body.password)
+                .setMinLength(3)
                 .setRequired(true)
         );
     

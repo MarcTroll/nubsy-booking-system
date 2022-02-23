@@ -25,7 +25,7 @@ export class EMailFormField extends AbstractFormField<string> implements IMaxLen
     }
     
     //<editor-fold desc="Implementation of IMaxLengthFormField">
-    maxLength: number;
+    maxLength: number = null;
     
     getMaxLength() {
         return this.maxLength;
@@ -38,7 +38,7 @@ export class EMailFormField extends AbstractFormField<string> implements IMaxLen
     }
     
     validateMaxLength() {
-        return this.getValue().length <= this.getMaxLength();
+        return this.maxLength === null || this.getValue().length <= this.getMaxLength();
     }
     //</editor-fold>
     

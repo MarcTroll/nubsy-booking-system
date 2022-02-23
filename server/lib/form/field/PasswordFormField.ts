@@ -20,7 +20,7 @@ export class PasswordFormField extends AbstractFormField<string> implements IMin
     }
     
     //<editor-fold desc="Implementation of IMinLengthFormField">
-    minLength: number;
+    minLength: number = null;
     
     getMinLength() {
         return this.minLength;
@@ -33,7 +33,7 @@ export class PasswordFormField extends AbstractFormField<string> implements IMin
     }
     
     validateMinLength() {
-        return this.getValue().length >= this.getMinLength();
+        return this.minLength === null || this.getValue().length >= this.getMinLength();
     }
     //</editor-fold>
     
