@@ -1,6 +1,6 @@
 import {PoolConnection, RowDataPacket} from "mysql2/promise";
 import {BookingLib} from "~/server/lib/BookingLib";
-import {randomBytes} from "crypto";
+import {CryptoUtil} from "~/server/lib/util/CryptoUtil";
 
 export class SessionHandler {
     
@@ -20,7 +20,7 @@ export class SessionHandler {
         const connection : PoolConnection = await BookingLib.getDatabase().getConnection();
         //
         do {
-            sessionID = randomBytes(20).toString('base64');
+            sessionID = CryptoUtil.generateSessionID();
             
             const [rows, _] = await connection.execute<RowDataPacket[]>("SELECT * FROM user_session WHERE sessionID=?", [sessionID]);
             if(rows.length == 0) {
