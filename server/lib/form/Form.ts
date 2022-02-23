@@ -46,7 +46,7 @@ export class Form {
     }
     
     /**
-     * Validates all form fields. A form field is valid if its value is valid. If an form field is invalid, its
+     * Validates all form fields. A form field is valid if its value is valid. If a form field is invalid, its
      * corresponding error will be logged in a map, which can be accessed using {@link Form#getValidationErrors}.
      *
      * @returns {boolean} Returns true if all values are valid. Otherwise, it will return false.
