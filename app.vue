@@ -1,12 +1,21 @@
-<script setup>
-import Header from "./components/Header";
+<script lang="ts" setup>
+import Header from "~/components/Header.vue";
 
-useMeta({
-    title: "Testitest"
-})
+useTitle("nupsy - loading...")
 
 const authentication = useAuth();
-// TODO: auto login
+
+const res = await $fetch("/api/user/relogin", {
+    method: "POST",
+    headers: useRequestHeaders()
+});
+
+if(res.status === "success") {
+    authentication.value.loggedIn = true;
+    authentication.value.user = res.user;
+
+    // TODO: Check if user account exists
+}
 authentication.value.ready = true;
 </script>
 
