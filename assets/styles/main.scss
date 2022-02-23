@@ -206,6 +206,21 @@ form {
       border-color: $primary-color;
     }
   }
+
+  .formError {
+    label {
+      color: #D40000;
+    }
+    input {
+      border-color: #D40000;
+    }
+    .formErrorDescription {
+      display: block;
+      padding: 6px 20px 4px;
+      background: #D40000;
+      color: white;
+    }
+  }
 }
 
 table {

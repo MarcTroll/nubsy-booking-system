@@ -3,8 +3,41 @@
 
     const loginForm = ref({
         emailAddress: "",
-        password: ""
+        password: "",
+        errors: {
+            __code: "",
+            emailAddress: "",
+            password: ""
+        }
     });
+
+    const errorCodeDescription = computed(() => {
+        switch(loginForm.value.errors.__code) {
+            case "ERR_FORM_INVALID":
+                return "Deine Eingaben stimmen nicht. Bitte überprüfe deine Eingaben und sende das Formular danach erneut ab.";
+            case "ERR_USER_DOESNT_EXIST":
+                return "Es konnte kein Nutzer mit dieser E-Mail-Adresse gefunden werden.";
+            case "ERR_PASSWORD_INVALID":
+                return "Das Passwort stimmt nicht überein. Solltest du dein Passwort vergessen haben, kannst du es über die Schaltfläche unten zurücksetzen.";
+            case "ERR_EMAIL_NOT_CONFIRMED":
+                return "Du musst deine E-Mail-Adresse erst bestätigen, bevor du dich anmelden kannst.";
+            default:
+                return "Ein unbekannter Fehler ist aufgetreten.";
+        }
+    })
+    function errorFieldDescription(errorCode : string) : string {
+        switch(errorCode) {
+            case "ERR_FORM_VALIDATION_VALUE_UNDEFINED":
+                return "Diese Feld muss ausgefüllt werden.";
+            case "ERR_FORM_VALIDATION_EMAIL_INVALID":
+                return "Die Eingabe ist keine gültige E-Mail-Adresse.";
+            case "ERR_FORM_VALIDATION_PASSWORD_SHORT":
+                return "Das Passwort ist zu kurz. Es muss mindestens 3 Zeichen lang sein.";
+            default:
+                return "Ein unbekannter Fehler ist aufgetreten.";
+        }
+        return "";
+    }
 
     const authentication = useAuth();
 
@@ -14,12 +47,30 @@
             body: loginForm.value
         });
 
-        console.log(res);
         if(res.status === "success") {
             authentication.value.loggedIn = true;
             authentication.value.user = res.user;
+
+            // TODO: Check if user account exists
+
             await useRouter().push("/");
+        } else {
+            resetFormErrors();
+            if(res.code === "ERR_FORM_INVALID") {
+                loginForm.value.errors = {...loginForm.value.errors, ...{__code: res.code}, ...res.formErrors};
+            }
+            loginForm.value.errors = {...loginForm.value.errors, ...{__code: res.code}};
+
+            console.log(loginForm.value.errors)
         }
+    }
+
+    function resetFormErrors() {
+        loginForm.value.errors = {
+            __code: "",
+            emailAddress: "",
+            password: ""
+        };
     }
 </script>
 
@@ -35,16 +86,23 @@
                 Du hast noch kein Benutzerkonto? <NuxtLink to="/login">Registriere</NuxtLink> dich jetzt, um Plätze zu buchen!
             </div>
         </div>
+        <div class="content" v-if="loginForm.errors.__code">
+            <div class="message error">
+                {{ errorCodeDescription }}
+            </div>
+        </div>
         <form @submit.prevent="submit()">
             <div class="content userLogin formInputContainer">
                 <div class="grid grid-2">
-                    <div>
+                    <div :class="{formError: loginForm.errors.emailAddress}">
                         <label for="email">E-Mail-Adresse</label>
-                        <input type="email" id="email" v-model="loginForm.emailAddress">
+                        <input type="text" id="email" v-model="loginForm.emailAddress">
+                        <div class="formErrorDescription" v-if="loginForm.errors.emailAddress">{{errorFieldDescription(loginForm.errors.emailAddress)}}</div>
                     </div>
-                    <div>
+                    <div :class="{formError: loginForm.errors.password}">
                         <label for="password">Passwort</label>
                         <input type="password" id="password" v-model="loginForm.password">
+                        <span class="formErrorDescription" v-if="loginForm.errors.password">{{errorFieldDescription(loginForm.errors.password)}}</span>
                     </div>
                 </div>
             </div>

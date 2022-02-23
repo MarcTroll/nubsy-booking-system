@@ -7,6 +7,9 @@ import {CryptoUtil} from "~/server/lib/util/CryptoUtil";
 import {UserObject} from "~/server/lib/data/User";
 import {TimeUtil} from "~/server/lib/util/TimeUtil";
 import {UserAccountObject} from "~/server/lib/data/UserAccount";
+import {Form} from "~/server/lib/form/Form";
+import {EMailFormField} from "~/server/lib/form/field/EMailFormField";
+import {PasswordFormField} from "~/server/lib/form/field/PasswordFormField";
 
 interface LoginRequestBody {
     emailAddress?: string;
@@ -22,17 +25,29 @@ export default async (req: IncomingMessage, res: ServerResponse) => {
     }
     
     const body = <LoginRequestBody>(await useBody(req));
+    const form = Form.create()
+        .addFormField(
+            "emailAddress",
+            new EMailFormField(body.emailAddress)
+                .setRequired(true)
+        )
+        .addFormField(
+            "password",
+            new PasswordFormField(body.password)
+                .setRequired(true)
+        );
     
-    // TODO: error handling
-    if(!body.emailAddress || !body.password) {
+    // error when validation fails
+    if(!form.validate()) {
         return {
             status: "error",
-            code: "ERR_REQUEST_BODY_INVALID"
+            code: "ERR_FORM_INVALID",
+            formErrors: Object.fromEntries(form.getValidationErrors())
         }
     }
     
     const connection : PoolConnection = await BookingLib.getDatabase().getConnection();
-    const [user, _] = await connection.execute<(UserObject & UserAccountObject)[]>("SELECT * FROM user INNER JOIN user_account ua on user.userID = ua.userID AND ua.isDefaultAccount = 1 WHERE email=?", [
+    const [user, _] = await connection.execute<(UserObject & UserAccountObject)[]>("SELECT user.userID, email, password, emailConfirmed, ua.username FROM user LEFT JOIN user_account ua on user.userID = ua.userID AND ua.isDefaultAccount = 1 WHERE email=?", [
         body.emailAddress
     ]);
     
@@ -61,6 +76,8 @@ export default async (req: IncomingMessage, res: ServerResponse) => {
     }
     
     const currentTime = TimeUtil.getUnixTime();
+    
+    console.log(user[0]);
     
     const [session, _2] = await connection.execute<UserObject[]>("UPDATE user_session SET userID=?, lastActivity=? WHERE sessionID=?", [
         user[0].userID,

@@ -173,6 +173,18 @@ form input {
 form input:focus {
   border-color: #005a91;
 }
+form .formError label {
+  color: #D40000;
+}
+form .formError input {
+  border-color: #D40000;
+}
+form .formError .formErrorDescription {
+  display: block;
+  padding: 6px 20px 4px;
+  background: #D40000;
+  color: white;
+}
 
 table {
   border-collapse: separate;
