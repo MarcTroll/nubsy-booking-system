@@ -120,6 +120,10 @@ p {
   line-height: 23px;
 }
 
+strong {
+  font-weight: 500;
+}
+
 // button
 .button {
   font-size: 14px;
@@ -159,6 +163,10 @@ p {
 
   &.information {
     border-color: #005a91;
+  }
+
+  &.error {
+    border-color: #D40000;
   }
 }
 

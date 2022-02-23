@@ -103,6 +103,10 @@ p {
   line-height: 23px;
 }
 
+strong {
+  font-weight: 500;
+}
+
 .button {
   font-size: 14px;
   font-weight: 500;
@@ -136,6 +140,9 @@ p {
 }
 .message.information {
   border-color: #005a91;
+}
+.message.error {
+  border-color: #D40000;
 }
 
 .grid {

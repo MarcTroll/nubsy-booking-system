@@ -1,19 +1,30 @@
 <script lang="ts" setup>
     useTitle("Anmelden");
 
-    const loginForm = {
-        emailAddress: ""
-    }
+    const loginForm = ref({
+        emailAddress: "",
+        password: ""
+    });
 
     const authentication = useAuth();
 
-    function submit() {
+    async function submit() {
+        const res = await $fetch("/api/user/login", {
+            method: "POST",
+            body: loginForm.value
+        });
 
+        console.log(res);
+        if(res.status === "success") {
+            authentication.value.loggedIn = true;
+            authentication.value.user = res.user;
+            await useRouter().push("/");
+        }
     }
 </script>
 
 <template>
-    <div>
+    <div v-if="!authentication.loggedIn">
         <div class="content">
             <h2>
                 Anmelden
@@ -33,7 +44,7 @@
                     </div>
                     <div>
                         <label for="password">Passwort</label>
-                        <input type="password" id="password" v-model="loginForm.emailAddress">
+                        <input type="password" id="password" v-model="loginForm.password">
                     </div>
                 </div>
             </div>
@@ -42,5 +53,17 @@
                 <NuxtLink to="/login" class="button">Passwort vergessen</NuxtLink>
             </div>
         </form>
+    </div>
+    <div v-else>
+        <div class="content">
+            <h2>
+                Anmelden
+            </h2>
+        </div>
+        <div class="content">
+            <div class="message error">
+                Diese Seite kannst du derzeit nicht aufrufen.
+            </div>
+        </div>
     </div>
 </template>

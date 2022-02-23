@@ -56,7 +56,13 @@
                     Anmelden, um Plätze zu buchen!
                 </NuxtLink>
                 <span v-if="authentication.loggedIn">
-                    Willkommen, {{authentication.user.name}}
+                    Angemeldet als <strong>{{authentication.user.name}}</strong>
+                    <NuxtLink to="/me" class="button">
+                        Profil
+                    </NuxtLink>
+                    <NuxtLink to="/me" class="button">
+                        Administration
+                    </NuxtLink>
                 </span>
             </div>
             <div class="calendarDateNavigation">
