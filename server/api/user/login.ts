@@ -49,7 +49,7 @@ export default async (req: IncomingMessage, res: ServerResponse) => {
     }
     
     const connection : PoolConnection = await BookingLib.getDatabase().getConnection();
-    const [user, _] = await connection.execute<(UserObject & UserAccountObject)[]>("SELECT user.userID, email, password, emailConfirmed, ua.username FROM user LEFT JOIN user_account ua on user.userID = ua.userID AND ua.isDefaultAccount = 1 WHERE email=?", [
+    const [user, _] = await connection.execute<(UserObject & UserAccountObject)[]>("SELECT user.userID, email, password, emailConfirmed, ua.forename FROM user LEFT JOIN user_account ua on user.userID = ua.userID AND ua.isDefaultAccount = 1 WHERE email=?", [
         body.emailAddress
     ]);
     
@@ -94,7 +94,7 @@ export default async (req: IncomingMessage, res: ServerResponse) => {
         status: "success",
         user: {
             id: user[0].userID,
-            name: user[0].username
+            name: user[0].forename
         }
     }
 }

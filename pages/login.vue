@@ -18,7 +18,7 @@
             case "ERR_USER_DOESNT_EXIST":
                 return "Es konnte kein Nutzer mit dieser E-Mail-Adresse gefunden werden.";
             case "ERR_PASSWORD_INVALID":
-                return "Das Passwort stimmt nicht überein. Solltest du dein Passwort vergessen haben, kannst du es über die Schaltfläche unten zurücksetzen.";
+                return "Das Passwort stimmt nicht. Solltest du dein Passwort vergessen haben, kannst du es über die Schaltfläche unten zurücksetzen.";
             case "ERR_EMAIL_NOT_CONFIRMED":
                 return "Du musst deine E-Mail-Adresse erst bestätigen, bevor du dich anmelden kannst.";
             default:

@@ -7,7 +7,15 @@ export interface UserAccountObject extends RowDataPacket {
      * Number referencing to the original user.
      * */
     userID: number;
-    username: string;
+    
+    forename: string;
+    surname: string;
+    
+    postcode: number;
+    city: string;
+    street: string;
+    
+    tel: string;
     
     /**
      * Boolean indicating whether the account is the user's default account.

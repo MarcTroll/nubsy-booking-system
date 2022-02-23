@@ -1,4 +1,4 @@
-# Nuxt 3 Booking System
+# Nubsy - Nuxt 3 Booking System
 A basic booking system for sport facilities developed using Nuxt 3. 
 
 Because of the reason that Nuxt 3 as well as the booking system itself are

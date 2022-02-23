@@ -24,7 +24,7 @@ export default async (req: NubsyIncomingMessage, res: ServerResponse) => {
     }
     
     const connection : PoolConnection = await BookingLib.getDatabase().getConnection();
-    const [user, _] = await connection.execute<(UserObject & UserAccountObject)[]>("SELECT user.userID, ua.username FROM user LEFT JOIN user_account ua on user.userID = ua.userID AND ua.isDefaultAccount = 1 INNER JOIN user_session us on user.userID = us.userID WHERE us.sessionID=?", [
+    const [user, _] = await connection.execute<(UserObject & UserAccountObject)[]>("SELECT user.userID, ua.forename FROM user LEFT JOIN user_account ua on user.userID = ua.userID AND ua.isDefaultAccount = 1 INNER JOIN user_session us on user.userID = us.userID WHERE us.sessionID=?", [
         req.sessionID
     ]);
     
@@ -50,7 +50,7 @@ export default async (req: NubsyIncomingMessage, res: ServerResponse) => {
         status: "success",
         user: {
             id: user[0].userID,
-            name: user[0].username
+            name: user[0].forename
         }
     }
 }
