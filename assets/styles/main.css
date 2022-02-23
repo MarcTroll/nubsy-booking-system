@@ -147,9 +147,14 @@ strong {
 
 .grid {
   display: grid;
+  grid-row-gap: 20px;
 }
 .grid.grid-2 {
   grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+  grid-column-gap: 20px;
+}
+.grid.grid-5 {
+  grid-template-columns: repeat(5, calc(20% - 16px));
   grid-column-gap: 20px;
 }
 .grid.stretch {
@@ -157,7 +162,7 @@ strong {
   align-items: stretch;
 }
 
-form .formInputContainer label, form .formInputContainer input {
+form .formInputContainer label, form .formInputContainer input, form .formInputContainer select {
   display: block;
   box-sizing: border-box;
   width: 100%;
@@ -165,7 +170,7 @@ form .formInputContainer label, form .formInputContainer input {
 form .formSubmit {
   text-align: center;
 }
-form input {
+form input, form select {
   padding: 10px 20px;
   outline: none;
   border: 1px solid #b1b1b1;
@@ -176,7 +181,7 @@ form input:focus {
 form .formError label {
   color: #D40000;
 }
-form .formError input {
+form .formError input, form .formError select {
   border-color: #D40000;
 }
 form .formError .formErrorDescription {

@@ -6,18 +6,18 @@ import {useBody, useMethod} from "h3";
 import {NubsyIncomingMessage} from "~/server/lib/system/web/NubsyIncomingMessage";
 import {Form} from "~/server/lib/form/Form";
 import {TextFormField} from "~/server/lib/form/field/TextFormField";
-import {NumberFormField} from "~/server/lib/form/field/NumberFormField";
+import {SelectFormField} from "~/server/lib/form/field/SelectFormField";
 
 interface AccountCreateRequestInterface {
     
+    salutation?: string;
     forename?: string;
     surname?: string;
     
-    postcode?: number;
     city?: string;
     street?: string;
     
-    tel?: string;
+    phone?: string;
     
     isDefaultAccount?: boolean;
     
@@ -41,6 +41,12 @@ export default async (req: NubsyIncomingMessage, res: ServerResponse) => {
     const body = <AccountCreateRequestInterface>(await useBody(req));
     const form = Form.create()
         .addFormField(
+            "salutation",
+            new SelectFormField(body.salutation)
+                .setOptions(["male", "female"])
+                .setRequired(true)
+        )
+        .addFormField(
             "forename",
             new TextFormField(body.forename)
                 .setMinLength(2)
@@ -55,14 +61,9 @@ export default async (req: NubsyIncomingMessage, res: ServerResponse) => {
                 .setRequired(true)
         )
         .addFormField(
-            "postcode",
-            new NumberFormField(body.postcode)
-                .setRequired(true)
-        )
-        .addFormField(
             "city",
             new TextFormField(body.city)
-                .setMinLength(2)
+                .setMinLength(8)
                 .setMaxLength(64)
                 .setRequired(true)
         )
@@ -74,14 +75,15 @@ export default async (req: NubsyIncomingMessage, res: ServerResponse) => {
                 .setRequired(true)
         )
         .addFormField(
-            "tel",
-            new TextFormField(body.tel)
+            "phone",
+            new TextFormField(body.phone)
                 .setMinLength(3)
-                .setMaxLength(64)
+                .setMaxLength(24)
                 .setRequired(true)
         )
     
     if(!form.validate()) {
+        console.log(form)
         return {
             status: "error",
             code: "ERR_FORM_INVALID",
@@ -103,13 +105,33 @@ export default async (req: NubsyIncomingMessage, res: ServerResponse) => {
         return;
     }
     
+    const [update, _2] = await connection.execute<RowDataPacket[]>("INSERt INTO user_account (userID, salutation, forename, surname, city, street, phone, isDefaultAccount) VALUES (?, ?, ?, ?, ?, ?, ?, 1) ON DUPLICATE KEY UPDATE salutation=?, forename=?, surname=?, city=?, street=?, phone=?", [
+        user[0].userID,
+        form.getFormField("salutation").getValue(),
+        form.getFormField("forename").getValue(),
+        form.getFormField("surname").getValue(),
+        form.getFormField("city").getValue(),
+        form.getFormField("street").getValue(),
+        form.getFormField("phone").getValue(),
+        form.getFormField("salutation").getValue(),
+        form.getFormField("forename").getValue(),
+        form.getFormField("surname").getValue(),
+        form.getFormField("city").getValue(),
+        form.getFormField("street").getValue(),
+        form.getFormField("phone").getValue()
+    ]);
+    
+    const [userAccount, _3] = await connection.execute<RowDataPacket[]>("SELECT forename FROM user_account WHERE userID=?", [
+        user[0].userID
+    ]);
+    
     await connection.release();
     
     return {
         status: "success",
         user: {
             id: user[0].userID,
-            name: user[0].username
+            name: userAccount[0].forename
         }
     }
 }

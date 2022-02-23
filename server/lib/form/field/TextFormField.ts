@@ -55,7 +55,7 @@ export class TextFormField extends AbstractFormField<string> implements IMinLeng
     }
     
     validateMaxLength() {
-        return this.getMaxLength() === null || this.getValue().length >= this.getMaxLength();
+        return this.getMaxLength() === null || this.getValue().length <= this.getMaxLength();
     }
     //</editor-fold>
     

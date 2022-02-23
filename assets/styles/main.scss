@@ -172,9 +172,15 @@ strong {
 
 .grid {
   display: grid;
+  grid-row-gap: 20px;
 
   &.grid-2 {
     grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+    grid-column-gap: 20px;
+  }
+
+  &.grid-5 {
+    grid-template-columns: repeat(5, calc(20% - 16px));
     grid-column-gap: 20px;
   }
 
@@ -186,7 +192,7 @@ strong {
 
 form {
   .formInputContainer {
-    label, input {
+    label, input, select {
       display: block;
       box-sizing: border-box;
       width: 100%;
@@ -197,11 +203,13 @@ form {
     text-align: center;
   }
 
-  input {
+  input, select {
     padding: 10px 20px;
     outline: none;
     border: 1px solid #b1b1b1;
+  }
 
+  input {
     &:focus {
       border-color: $primary-color;
     }
@@ -211,7 +219,7 @@ form {
     label {
       color: #D40000;
     }
-    input {
+    input, select {
       border-color: #D40000;
     }
     .formErrorDescription {

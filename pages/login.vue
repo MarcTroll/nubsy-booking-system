@@ -26,15 +26,17 @@
         }
     })
     function errorFieldDescription(errorCode : string) : string {
+        if(errorCode.startsWith("ERR_FORM_VALIDATION_PASSWORD_TOO_SHORT")) {
+            return "Das Passwort ist zu kurz. Es muss mindestens " + errorCode.split(":")[1] + " Zeichen lang sein.";
+        }
+        if(errorCode.startsWith("ERR_FORM_VALIDATION_PASSWORD_TOO_LONG")) {
+            return "Die E-Mail-Adresse ist zu lang. Sie darf maximal " + errorCode.split(":")[1] + " Zeichen lang sein.";
+        }
         switch(errorCode) {
             case "ERR_FORM_VALIDATION_VALUE_UNDEFINED":
                 return "Diese Feld muss ausgefüllt werden.";
             case "ERR_FORM_VALIDATION_EMAIL_INVALID":
                 return "Die Eingabe ist keine gültige E-Mail-Adresse.";
-            case "ERR_FORM_VALIDATION_PASSWORD_TOO_SHORT":
-                return "Das Passwort ist zu kurz. Es muss mindestens 3 Zeichen lang sein.";
-            case "ERR_FORM_VALIDATION_EMAIL_TOO_LONG":
-                return "Die E-Mail-Adresse ist zu lang. Sie darf maximal 256 Zeichen lang sein.";
             default:
                 return "Ein unbekannter Fehler ist aufgetreten.";
         }
@@ -52,8 +54,6 @@
             authentication.value.loggedIn = true;
             authentication.value.user = res.user;
 
-            // TODO: Check if user account exists
-
             await useRouter().push("/");
         } else {
             resetFormErrors();
@@ -61,8 +61,6 @@
                 loginForm.value.errors = {...loginForm.value.errors, ...{__code: res.code}, ...res.formErrors};
             }
             loginForm.value.errors = {...loginForm.value.errors, ...{__code: res.code}};
-
-            console.log(loginForm.value.errors)
         }
     }
 
