@@ -1,8 +1,8 @@
 import {AbstractFormField} from "~/server/lib/form/field/AbstractFormField";
 
-export class NumberFormField extends AbstractFormField<string> {
+export class NumberFormField extends AbstractFormField<number> {
     
-    constructor(number: string) {
+    constructor(number: number) {
         super(number);
     }
     
@@ -11,7 +11,7 @@ export class NumberFormField extends AbstractFormField<string> {
             return false;
         }
         
-        if(isNaN(parseInt(this.getValue()))) {
+        if(isNaN(this.getValue())) {
             this.setValidationError("ERR_FORM_VALIDATION_NUMBER_INVALID")
             return false;
         }
