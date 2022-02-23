@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import Header from "~/components/Header.vue";
 
-useTitle("nupsy - loading...")
+useTitle("nubsy - loading...")
 
 const authentication = useAuth();
 
