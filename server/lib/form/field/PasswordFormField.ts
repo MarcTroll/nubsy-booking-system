@@ -1,6 +1,7 @@
 import {AbstractFormField} from "~/server/lib/form/field/AbstractFormField";
+import {IMinLengthFormField} from "~/server/lib/form/field/IMinLengthFormField";
 
-export class PasswordFormField extends AbstractFormField<string> {
+export class PasswordFormField extends AbstractFormField<string> implements IMinLengthFormField {
     
     constructor(password: string) {
         super(password);
@@ -11,11 +12,29 @@ export class PasswordFormField extends AbstractFormField<string> {
             return false;
         }
         
-        if(this.getValue().length < 3) {
-            return this.setValidationError("ERR_FORM_VALIDATION_PASSWORD_SHORT");
+        if(!this.validateMinLength()) {
+            return this.setValidationError("ERR_FORM_VALIDATION_PASSWORD_TOO_SHORT");
         }
         
         return true;
     }
+    
+    //<editor-fold desc="Implementation of IMinLengthFormField">
+    minLength: number;
+    
+    getMinLength() {
+        return this.minLength;
+    }
+    
+    setMinLength(length: number) {
+        this.minLength = length;
+        
+        return this;
+    }
+    
+    validateMinLength() {
+        return this.getValue().length >= this.getMinLength();
+    }
+    //</editor-fold>
     
 }
