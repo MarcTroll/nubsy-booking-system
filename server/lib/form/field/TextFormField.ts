@@ -14,10 +14,10 @@ export class TextFormField extends AbstractFormField<string> implements IMinLeng
         }
         
         if(!this.validateMinLength()) {
-            return this.setValidationError("ERR_FORM_VALIDATION_TEXT_TOO_SHORT");
+            return this.setValidationError("ERR_FORM_VALIDATION_TEXT_TOO_SHORT:" + this.getMinLength());
         }
         if(!this.validateMaxLength()) {
-            return this.setValidationError("ERR_FORM_VALIDATION_TEXT_TOO_LONG");
+            return this.setValidationError("ERR_FORM_VALIDATION_TEXT_TOO_LONG:" + this.getMaxLength());
         }
         
         return true;
