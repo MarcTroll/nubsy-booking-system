@@ -43,7 +43,7 @@ export default async (req: NubsyIncomingMessage, res: ServerResponse) => {
         .addFormField(
             "salutation",
             new SelectFormField(body.salutation)
-                .setOptions(["male", "female"])
+                .setOptions(["none", "male", "female"])
                 .setRequired(true)
         )
         .addFormField(

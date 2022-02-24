@@ -1,9 +1,6 @@
 <script lang="ts" setup>
     const route = useRoute();
-
-    const isHomepage = computed(() => {
-        return route.path !== "/";
-    })
+    const breadcrumb = useBreadcrumb();
 </script>
 
 <template>
@@ -15,10 +12,10 @@
                 </NuxtLink>
             </div>
         </header>
-        <div class="breadcrumb" v-if="isHomepage">
+        <div class="breadcrumbs" v-if="breadcrumb.paths.length > 0">
             <div class="content">
-                <NuxtLink to="/">
-                    zurück zur Startseite
+                <NuxtLink v-for="path of breadcrumb.paths" :to="path.link" class="breadcrumb">
+                    {{ path.title }}
                 </NuxtLink>
             </div>
         </div>
@@ -44,11 +41,21 @@
         }
     }
 
-    .breadcrumb {
+    .breadcrumbs {
         background: darken(white, 5%);
         padding: 10px 0;
         > .content {
             margin-top: 0;
+        }
+
+        .breadcrumb {
+            &:not(:first-child) {
+                margin-left: 10px;
+                &:before {
+                    content: '/';
+                    margin-right: 10px;
+                }
+            }
         }
     }
 </style>

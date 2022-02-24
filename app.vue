@@ -23,7 +23,7 @@ if(res.status === "success") {
     }
 }
 
-watch(route, async (newRoute) => {
+router.beforeResolve(async (newRoute) => {
     if(authentication.value.loggedIn && !authentication.value.user.name) {
         if(!newRoute.path.startsWith("/my/accounts")) {
             await router.replace({
@@ -31,7 +31,8 @@ watch(route, async (newRoute) => {
             });
         }
     }
-})
+    useBreadcrumb().value.paths = [];
+});
 
 authentication.value.ready = true;
 </script>

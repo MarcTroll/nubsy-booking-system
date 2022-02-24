@@ -1,11 +1,18 @@
 <script lang="ts" setup>
-    useTitle("Nutzer");
+    useTitle("Mein Account");
+    useBreadcrumb().value.paths = [{
+        title: "Startseite",
+        link: "/"
+    },{
+        title: "Mein Konto",
+        link: "/my"
+    }];
 
     const authentication = useAuth();
     const form = ref({
         success: false,
         fields: {
-            salutation: "male",
+            salutation: "none",
             forename: "",
             surname: "",
             city: "",
@@ -107,7 +114,7 @@
     <div>
         <div class="content">
             <h2>
-                Accounts
+                Mein Account
             </h2>
         </div>
         <div class="content">
@@ -133,6 +140,7 @@
                     <div :class="{formError: form.errors.salutation}" id="salutationContainer">
                         <label for="salutation">Anrede</label>
                         <select id="salutation" v-model="form.fields.salutation">
+                            <option value="none">keine Auswahl</option>
                             <option value="male">Herr</option>
                             <option value="female">Frau</option>
                         </select>

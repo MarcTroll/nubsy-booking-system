@@ -2,7 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap");
 html, body {
   margin: 0;
-  padding: 0;
+  padding: 0 0 20px;
   font-family: "Roboto", sans-serif;
   font-size: 14px;
   font-weight: 400;
@@ -10,17 +10,7 @@ html, body {
   background: #FFFFFF;
   line-height: 1.5;
 }
-@media only screen and (min-width: 0) {
-  html, body {
-    font-size: 14px;
-  }
-}
-@media all and (min-width : 993px) {
-  html, body {
-    font-size: 14.5px;
-  }
-}
-@media all and (min-width : 1201px) {
+@media all {
   html, body {
     font-size: 15px;
   }
@@ -115,6 +105,7 @@ strong {
   border: 1px solid #005a91;
   color: #005a91;
   cursor: pointer;
+  text-align: center;
 }
 .button:not(:first-child) {
   margin-left: 20px;
@@ -128,6 +119,10 @@ strong {
 }
 .button.primary:hover {
   background: #004a78;
+}
+
+.block {
+  display: block;
 }
 
 .message {
@@ -147,13 +142,22 @@ strong {
 .message.success {
   border-color: #039000;
 }
+.message.warning {
+  border-color: #ff8000;
+}
 
-.grid {
-  display: grid;
-  grid-row-gap: 20px;
+@media all and (min-width: 769px) {
+  .grid {
+    display: grid;
+    grid-row-gap: 20px;
+  }
 }
 .grid.grid-2 {
   grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+  grid-column-gap: 20px;
+}
+.grid.grid-4 {
+  grid-template-columns: repeat(4, calc(25% - 15px));
   grid-column-gap: 20px;
 }
 .grid.grid-5 {

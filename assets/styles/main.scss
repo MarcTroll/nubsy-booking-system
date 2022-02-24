@@ -13,22 +13,9 @@ $success-color: #388E3C;
 $error-color: #D32F2F;
 $link-color: #005a91;
 
-$small-screen: 600px;
-$small-screen-up: 601px;
-$medium-screen: 992px;
-$medium-screen-up: 993px;
-$large-screen: 1200px;
-$large-screen-up: 1201px;
-
-$small-up: "min-width : #{$small-screen-up}";
-$medium-up: "min-width : #{$medium-screen-up}";
-$medium-down: "max-width : #{$medium-screen}";
-$large: "min-width : #{$large-screen-up}";
-$small: "max-width : #{$small-screen}";
-
 html, body {
   margin: 0;
-  padding: 0;
+  padding: 0 0 20px;
   font-family: "Roboto", sans-serif;
   font-size: 14px;
   font-weight: 400;
@@ -36,15 +23,7 @@ html, body {
   background: #FFFFFF;
   line-height: 1.5;
 
-  @media only screen and (min-width: 0) {
-    font-size: 14px;
-  }
-
-  @media all and ($medium-up) {
-    font-size: 14.5px;
-  }
-
-  @media all and ($large) {
+  @media all {
     font-size: 15px;
   }
 }
@@ -133,6 +112,7 @@ strong {
   border: 1px solid $primary-color;
   color: $primary-color;
   cursor: pointer;
+  text-align: center;
 
   &:not(:first-child) {
     margin-left: 20px;
@@ -150,6 +130,10 @@ strong {
       background: $primary-color-dark;
     }
   }
+}
+
+.block {
+  display: block;
 }
 
 .message {
@@ -172,14 +156,25 @@ strong {
   &.success {
     border-color: #039000;
   }
+
+  &.warning {
+    border-color: #ff8000;
+  }
 }
 
 .grid {
-  display: grid;
-  grid-row-gap: 20px;
+  @media all and (min-width: 769px) {
+    display: grid;
+    grid-row-gap: 20px;
+  }
 
   &.grid-2 {
     grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+    grid-column-gap: 20px;
+  }
+
+  &.grid-4 {
+    grid-template-columns: repeat(4, calc(25% - 15px));
     grid-column-gap: 20px;
   }
 
