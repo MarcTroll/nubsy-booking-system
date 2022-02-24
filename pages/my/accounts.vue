@@ -3,6 +3,7 @@
 
     const authentication = useAuth();
     const form = ref({
+        success: false,
         fields: {
             salutation: "male",
             forename: "",
@@ -21,6 +22,7 @@
             phone: ""
         }
     });
+    let _timer = null;
 
     const res = await $fetch("/api/user/account/get", {
         headers: useRequestHeaders()
@@ -49,26 +51,45 @@
             case "ERR_FORM_VALIDATION_SELECTION_UNKNOWN_OPTION":
                 return "Bitte wähle aus einer der Optionen.";
             default:
-                return "Ein unbekannter Fehler ist aufgetreten.";
+                return "Folgender Fehler ist bei der Verarbeitung deiner Daten aufgetreten: " + errorCode;
         }
     }
 
     const submit = async function() {
-        const res = await $fetch("/api/user/account/create", {
-            method: "POST",
-            body: form.value.fields
-        });
+        if(_timer !== null) {
+            clearTimeout(_timer);
+            _timer = null;
+        }
 
-        if(res.status === "success") {
-            authentication.value.user = res.user;
-        } else {
-            resetFormErrors();
-            if(res.code === "ERR_FORM_INVALID") {
-                form.value.errors = {...form.value.errors, ...{__code: res.code}, ...res.formErrors};
+        try {
+            const res = await $fetch("/api/user/account/save", {
+                method: "POST",
+                body: form.value.fields
+            });
+
+            if(res.status === "success") {
+                resetFormErrors();
+                authentication.value.user = res.user;
+                form.value.success = true;
+
+                _timer = setTimeout(() => {
+                    form.value.success = false;
+
+                    _timer = null;
+                }, 5000);
+            } else {
+                resetFormErrors();
+                if(res.code === "ERR_FORM_INVALID") {
+                    form.value.errors = {...form.value.errors, ...{__code: res.code}, ...res.formErrors};
+                }
+                form.value.errors = {...form.value.errors, ...{__code: res.code}};
             }
-            form.value.errors = {...form.value.errors, ...{__code: res.code}};
+        } catch(err) {
+            resetFormErrors();
+            form.value.errors = {...form.value.errors, ...{__code: err.message}};
         }
     }
+
     function resetFormErrors() {
         form.value.errors = {
             __code: "",
@@ -99,6 +120,11 @@
         <div class="content" v-if="form.errors.__code">
             <div class="message error">
                 {{ errorCodeDescription }}
+            </div>
+        </div>
+        <div class="content" v-if="form.success">
+            <div class="message success">
+                Deine Eingaben wurden erfolgreich gespeichert!
             </div>
         </div>
         <form @submit.prevent="submit()">

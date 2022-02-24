@@ -38,29 +38,33 @@
             case "ERR_FORM_VALIDATION_EMAIL_INVALID":
                 return "Die Eingabe ist keine gültige E-Mail-Adresse.";
             default:
-                return "Ein unbekannter Fehler ist aufgetreten.";
+                return "Ein unbekannter Fehler ist aufgetreten. Sollte dieser Fehler weiterhin bestehen, kontaktiere den Administrator.";
         }
     }
 
     const authentication = useAuth();
 
     async function submit() {
-        const res = await $fetch("/api/user/login", {
-            method: "POST",
-            body: loginForm.value
-        });
+        try {
+            const res = await $fetch("/api/user/login", {
+                method: "POST",
+                body: loginForm.value
+            });
 
-        if(res.status === "success") {
-            authentication.value.loggedIn = true;
-            authentication.value.user = res.user;
+            if(res.status === "success") {
+                authentication.value.loggedIn = true;
+                authentication.value.user = res.user;
 
-            await useRouter().push("/");
-        } else {
-            resetFormErrors();
-            if(res.code === "ERR_FORM_INVALID") {
-                loginForm.value.errors = {...loginForm.value.errors, ...{__code: res.code}, ...res.formErrors};
+                await useRouter().push("/");
+            } else {
+                resetFormErrors();
+                if(res.code === "ERR_FORM_INVALID") {
+                    loginForm.value.errors = {...loginForm.value.errors, ...{__code: res.code}, ...res.formErrors};
+                }
+                loginForm.value.errors = {...loginForm.value.errors, ...{__code: res.code}};
             }
-            loginForm.value.errors = {...loginForm.value.errors, ...{__code: res.code}};
+        } catch(err) {
+            loginForm.value.errors = {...loginForm.value.errors, ...{__code: err.code}};
         }
     }
 

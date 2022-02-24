@@ -168,6 +168,10 @@ strong {
   &.error {
     border-color: #D40000;
   }
+
+  &.success {
+    border-color: #039000;
+  }
 }
 
 .grid {

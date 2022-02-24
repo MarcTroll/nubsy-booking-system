@@ -144,6 +144,9 @@ strong {
 .message.error {
   border-color: #D40000;
 }
+.message.success {
+  border-color: #039000;
+}
 
 .grid {
   display: grid;
