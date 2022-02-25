@@ -58,6 +58,7 @@ export class EmailFormField extends AbstractFormField<string, string> implements
         return {
             id: this.getId(),
             type: "email",
+            label: this.getLabel(),
             value: this.getSafeValue(),
             error: this.getValidationError(),
             maxLength: this.getMaxLength(),
