@@ -39,7 +39,7 @@ export default async (req: NubsyIncomingMessage, res: ServerResponse) => {
     }
     
     const body = <AccountCreateRequestInterface>(await useBody(req));
-    const form = Form.create()
+    const form = Form.create("accountUpdateForm")
         .addFormField(
             new SelectFormField("salutation", body.salutation)
                 .setOptions(["none", "male", "female"])

@@ -25,7 +25,7 @@ export default async (req: IncomingMessage, res: ServerResponse) => {
     }
     
     const body = <LoginRequestBody>(await useBody(req));
-    const form = Form.create()
+    const form = Form.create("loginForm")
         .addFormField(
             new EmailFormField("emailAddress", body.emailAddress)
                 .setMaxLength(256)

@@ -13,7 +13,6 @@ export default async (req: NubsyIncomingMessage, res: ServerResponse) => {
         return;
     }
     
-    
     if(!req.sessionID) {
         res.statusCode = 403;
         res.end("Forbidden");
