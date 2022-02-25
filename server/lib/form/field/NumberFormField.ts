@@ -2,8 +2,8 @@ import {AbstractFormField} from "~/server/lib/form/field/AbstractFormField";
 
 export class NumberFormField extends AbstractFormField<number> {
     
-    constructor(number: number) {
-        super(number);
+    constructor(id, number: number) {
+        super(id, number);
     }
     
     validate() {
