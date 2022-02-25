@@ -1,20 +1,26 @@
-import {ValidationUtil} from "~/server/lib/util/ValidationUtil";
+import {Form} from "~/server/lib/form/Form";
+import {TextFormField} from "~/server/lib/form/field/TextFormField";
+import {NumberFormField} from "~/server/lib/form/field/NumberFormField";
+import {useMethod} from "h3";
 
-const delay = (ms : number) => {
-    return new Promise(resolve => setTimeout(resolve, ms));
-};
+const form = Form.create("testForm")
+    .addFormField(
+        new TextFormField("name", "")
+            .setValue("Test")
+            .setLabel("Test-Label")
+            .setMinLength(3)
+            .setMaxLength(16)
+            .setRequired(false)
+    ).addFormField(
+        new NumberFormField("number", "9")
+            .setDecimals(4)
+            .setRequired(true)
+    )
 
 export default async (req: any, res: any) => {
-    const emailAddresses = [
-        "a@a.de",
-        "a@a.d"
-    ]
+    if(useMethod(req) === "GET") {
+        console.log("received GET-request to load form");
     
-    emailAddresses.forEach(emailAddress => {
-        console.log(ValidationUtil.isEmailAddress(emailAddress));
-    });
-    
-    return {
-        title: "empty 2"
+        return form.getClientForm();
     }
 }
