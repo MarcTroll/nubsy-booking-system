@@ -1,6 +1,7 @@
-import {AbstractFormFieldId} from "~/server/lib/form/AbstractFormFieldId";
+import {AbstractFormFieldIdentifier} from "~/server/lib/form/AbstractFormFieldIdentifier";
+import {IClientFormField} from "~/server/lib/form/field/IClientFormField";
 
-export abstract class AbstractFormField<ValueType, SafeValueType> extends AbstractFormFieldId {
+export abstract class AbstractFormField<ValueType, SafeValueType> extends AbstractFormFieldIdentifier {
     
     private value : ValueType;
     private required: boolean = false;
@@ -51,5 +52,7 @@ export abstract class AbstractFormField<ValueType, SafeValueType> extends Abstra
         
         return true;
     }
+    
+    abstract getClientField() : IClientFormField<any>;
     
 }

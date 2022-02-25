@@ -1,5 +1,12 @@
 import {AbstractFormField} from "~/server/lib/form/field/AbstractFormField";
 import {IMinLengthFormField} from "~/server/lib/form/field/IMinLengthFormField";
+import {IClientFormField} from "~/server/lib/form/field/IClientFormField";
+
+interface IClientPasswordFormField extends IClientFormField<string> {
+    
+    minLength: number;
+    
+}
 
 export class PasswordFormField extends AbstractFormField<string, string> implements IMinLengthFormField {
     
@@ -39,6 +46,16 @@ export class PasswordFormField extends AbstractFormField<string, string> impleme
     
     getSafeValue(): string {
         return this.getValue();
+    }
+    
+    getClientField(): IClientPasswordFormField {
+        return {
+            id: this.getId(),
+            type: "password",
+            value: this.getSafeValue(),
+            error: this.getValidationError(),
+            minLength: this.getMinLength()
+        };
     }
     
 }

@@ -2,7 +2,7 @@ import {AbstractFormField} from "~/server/lib/form/field/AbstractFormField";
 
 export class Form {
     
-    private formFields : Map<string, AbstractFormField<any>> = new Map<string, AbstractFormField<any>>();
+    private formFields : Map<string, AbstractFormField<any, any>> = new Map<string, AbstractFormField<any, any>>();
     private validationErrors : Map<string, string> = new Map<string, string>();
 
     /**
@@ -20,7 +20,7 @@ export class Form {
      *
      * @returns {Form} Returns the form instance.
      * */
-    addFormField(formField : AbstractFormField<any>) : Form {
+    addFormField(formField : AbstractFormField<any, any>) : Form {
         this.formFields.set(formField.getId(), formField);
         
         return this;
@@ -31,7 +31,7 @@ export class Form {
      *
      * @returns {AbstractFormField|null} Returns the form field if it exists. Otherwise null.
      * */
-    getFormField(id : string) : AbstractFormField<any> {
+    getFormField(id : string) : AbstractFormField<any, any> {
         return this.formFields.get(id) || null;
     }
     

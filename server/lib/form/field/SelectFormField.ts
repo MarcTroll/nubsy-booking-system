@@ -1,4 +1,11 @@
 import {AbstractFormField} from "~/server/lib/form/field/AbstractFormField";
+import {IClientFormField} from "~/server/lib/form/field/IClientFormField";
+
+interface IClientSelectFormField extends IClientFormField<string> {
+    
+    options: string[];
+    
+}
 
 export class SelectFormField extends AbstractFormField<string, string> {
     
@@ -33,6 +40,16 @@ export class SelectFormField extends AbstractFormField<string, string> {
     
     getSafeValue(): string {
         return this.getValue();
+    }
+    
+    getClientField(): IClientSelectFormField {
+        return {
+            id: this.getId(),
+            type: "select",
+            value: this.getSafeValue(),
+            error: this.getValidationError(),
+            options: this.getOptions()
+        };
     }
     
 }

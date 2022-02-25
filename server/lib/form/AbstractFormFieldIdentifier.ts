@@ -1,4 +1,4 @@
-export abstract class AbstractFormFieldId {
+export abstract class AbstractFormFieldIdentifier {
     
     private readonly formFieldId: string;
     

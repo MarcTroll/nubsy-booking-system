@@ -8,7 +8,7 @@ import {UserObject} from "~/server/lib/data/User";
 import {TimeUtil} from "~/server/lib/util/TimeUtil";
 import {UserAccountObject} from "~/server/lib/data/UserAccount";
 import {Form} from "~/server/lib/form/Form";
-import {EMailFormField} from "~/server/lib/form/field/EMailFormField";
+import {EmailFormField} from "~/server/lib/form/field/EmailFormField";
 import {PasswordFormField} from "~/server/lib/form/field/PasswordFormField";
 
 interface LoginRequestBody {
@@ -27,7 +27,7 @@ export default async (req: IncomingMessage, res: ServerResponse) => {
     const body = <LoginRequestBody>(await useBody(req));
     const form = Form.create()
         .addFormField(
-            new EMailFormField("emailAddress", body.emailAddress)
+            new EmailFormField("emailAddress", body.emailAddress)
                 .setMaxLength(256)
                 .setRequired(true)
         )

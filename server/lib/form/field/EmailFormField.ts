@@ -1,8 +1,16 @@
 import {AbstractFormField} from "~/server/lib/form/field/AbstractFormField";
 import {ValidationUtil} from "~/server/lib/util/ValidationUtil";
 import {IMaxLengthFormField} from "~/server/lib/form/field/IMaxLengthFormField";
+import {IClientFormField} from "~/server/lib/form/field/IClientFormField";
 
-export class EMailFormField extends AbstractFormField<string, string> implements IMaxLengthFormField {
+interface IClientEmailFormField extends IClientFormField<string> {
+    
+    maxLength: number;
+    validation: RegExp
+    
+}
+
+export class EmailFormField extends AbstractFormField<string, string> implements IMaxLengthFormField {
     
     constructor(id : string, emailAddress : string) {
         super(id, emailAddress);
@@ -44,6 +52,17 @@ export class EMailFormField extends AbstractFormField<string, string> implements
     
     getSafeValue(): string {
         return this.getValue();
+    }
+    
+    getClientField(): IClientEmailFormField {
+        return {
+            id: this.getId(),
+            type: "email",
+            value: this.getSafeValue(),
+            error: this.getValidationError(),
+            maxLength: this.getMaxLength(),
+            validation: ValidationUtil.getEmailValidator()
+        };
     }
     
 }

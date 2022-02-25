@@ -1,5 +1,12 @@
 import {AbstractFormField} from "~/server/lib/form/field/AbstractFormField";
 import {ValidationUtil} from "~/server/lib/util/ValidationUtil";
+import {IClientFormField} from "~/server/lib/form/field/IClientFormField";
+
+interface IClientNumberFormField extends IClientFormField<number> {
+    
+    validation: RegExp;
+    
+}
 
 export class NumberFormField extends AbstractFormField<string, number> {
     
@@ -34,6 +41,16 @@ export class NumberFormField extends AbstractFormField<string, number> {
     
     getSafeValue(): number {
         return parseInt(this.getValue());
+    }
+    
+    getClientField(): IClientNumberFormField {
+        return {
+            id: this.getId(),
+            type: "number",
+            value: this.getSafeValue(),
+            error: this.getValidationError(),
+            validation: ValidationUtil.getNumberValidator(this.getDecimals())
+        };
     }
     
 }

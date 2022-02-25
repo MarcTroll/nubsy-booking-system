@@ -1,6 +1,11 @@
 import {AbstractFormField} from "~/server/lib/form/field/AbstractFormField";
 import {IMinLengthFormField} from "~/server/lib/form/field/IMinLengthFormField";
 import {IMaxLengthFormField} from "~/server/lib/form/field/IMaxLengthFormField";
+import {IClientFormField} from "~/server/lib/form/field/IClientFormField";
+
+interface IClientTextFormField extends IClientFormField<string> {
+
+}
 
 export class TextFormField extends AbstractFormField<string, string> implements IMinLengthFormField, IMaxLengthFormField {
     
@@ -61,6 +66,15 @@ export class TextFormField extends AbstractFormField<string, string> implements 
     
     getSafeValue(): string {
         return this.getValue();
+    }
+    
+    getClientField(): IClientTextFormField {
+        return {
+            id: this.getId(),
+            type: "text",
+            value: this.getSafeValue(),
+            error: this.getValidationError()
+        };
     }
     
 }
