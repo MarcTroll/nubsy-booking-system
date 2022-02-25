@@ -47,6 +47,7 @@ export class NumberFormField extends AbstractFormField<string, number> {
         return {
             id: this.getId(),
             type: "number",
+            label: this.getLabel(),
             value: this.getSafeValue(),
             error: this.getValidationError(),
             validation: ValidationUtil.getNumberValidator(this.getDecimals()).toString()

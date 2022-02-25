@@ -4,6 +4,7 @@ import {IClientFormField} from "~/server/lib/form/field/IClientFormField";
 export abstract class AbstractFormField<ValueType, SafeValueType> extends AbstractFormFieldIdentifier {
     
     private value : ValueType;
+    private label : string = "";
     private required: boolean = false;
     private validationError : string = "";
     
@@ -33,6 +34,16 @@ export abstract class AbstractFormField<ValueType, SafeValueType> extends Abstra
     }
     
     abstract getSafeValue() : SafeValueType;
+    
+    setLabel(label : string) {
+        this.label = label;
+        
+        return this;
+    }
+    
+    getLabel() : string {
+        return this.label;
+    }
     
     setValidationError(validationError : string) : boolean {
         this.validationError = validationError;

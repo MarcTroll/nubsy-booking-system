@@ -52,6 +52,7 @@ export class PasswordFormField extends AbstractFormField<string, string> impleme
         return {
             id: this.getId(),
             type: "password",
+            label: this.getLabel(),
             value: this.getSafeValue(),
             error: this.getValidationError(),
             minLength: this.getMinLength()

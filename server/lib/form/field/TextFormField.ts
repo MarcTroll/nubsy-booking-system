@@ -5,6 +5,9 @@ import {IClientFormField} from "~/server/lib/form/field/IClientFormField";
 
 interface IClientTextFormField extends IClientFormField<string> {
 
+    minLength: number;
+    maxLength: number;
+    
 }
 
 export class TextFormField extends AbstractFormField<string, string> implements IMinLengthFormField, IMaxLengthFormField {
@@ -72,8 +75,11 @@ export class TextFormField extends AbstractFormField<string, string> implements 
         return {
             id: this.getId(),
             type: "text",
+            label: this.getLabel(),
             value: this.getSafeValue(),
-            error: this.getValidationError()
+            error: this.getValidationError(),
+            minLength: this.getMinLength(),
+            maxLength: this.getMaxLength()
         };
     }
     

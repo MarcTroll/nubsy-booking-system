@@ -46,6 +46,7 @@ export class SelectFormField extends AbstractFormField<string, string> {
         return {
             id: this.getId(),
             type: "select",
+            label: this.getLabel(),
             value: this.getSafeValue(),
             error: this.getValidationError(),
             options: this.getOptions()
