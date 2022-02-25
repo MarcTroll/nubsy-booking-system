@@ -4,8 +4,8 @@ import {IMaxLengthFormField} from "~/server/lib/form/field/IMaxLengthFormField";
 
 export class EMailFormField extends AbstractFormField<string> implements IMaxLengthFormField {
     
-    constructor(emailAddress: string) {
-        super(emailAddress);
+    constructor(id : string, emailAddress : string) {
+        super(id, emailAddress);
     }
     
     validate() {

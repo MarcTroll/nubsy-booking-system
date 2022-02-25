@@ -41,42 +41,36 @@ export default async (req: NubsyIncomingMessage, res: ServerResponse) => {
     const body = <AccountCreateRequestInterface>(await useBody(req));
     const form = Form.create()
         .addFormField(
-            "salutation",
-            new SelectFormField(body.salutation)
+            new SelectFormField("salutation", body.salutation)
                 .setOptions(["none", "male", "female"])
                 .setRequired(true)
         )
         .addFormField(
-            "forename",
-            new TextFormField(body.forename)
+            new TextFormField("forename", body.forename)
                 .setMinLength(2)
                 .setMaxLength(64)
                 .setRequired(true)
         )
         .addFormField(
-            "surname",
-            new TextFormField(body.surname)
+            new TextFormField("surname", body.surname)
                 .setMinLength(2)
                 .setMaxLength(64)
                 .setRequired(true)
         )
         .addFormField(
-            "city",
-            new TextFormField(body.city)
+            new TextFormField("city", body.city)
                 .setMinLength(8)
                 .setMaxLength(64)
                 .setRequired(true)
         )
         .addFormField(
-            "street",
-            new TextFormField(body.street)
+            new TextFormField("street", body.street)
                 .setMinLength(3)
                 .setMaxLength(64)
                 .setRequired(true)
         )
         .addFormField(
-            "phone",
-            new TextFormField(body.phone)
+            new TextFormField("phone", body.phone)
                 .setMinLength(3)
                 .setMaxLength(24)
                 .setRequired(true)

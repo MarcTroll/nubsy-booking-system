@@ -1,10 +1,13 @@
-export abstract class AbstractFormField<T> {
+import {AbstractFormFieldId} from "~/server/lib/form/AbstractFormFieldId";
+
+export abstract class AbstractFormField<T> extends AbstractFormFieldId {
     
     private value : T;
     private required: boolean = false;
     private validationError : string = "";
     
-    protected constructor(formFieldValue : T) {
+    protected constructor(formFieldId : string, formFieldValue : T) {
+        super(formFieldId);
         this.value = formFieldValue;
     }
     

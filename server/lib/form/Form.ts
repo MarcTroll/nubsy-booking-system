@@ -20,8 +20,8 @@ export class Form {
      *
      * @returns {Form} Returns the form instance.
      * */
-    addFormField(id : string, formField : AbstractFormField<any>) : Form {
-        this.formFields.set(id, formField);
+    addFormField(formField : AbstractFormField<any>) : Form {
+        this.formFields.set(formField.getId(), formField);
         
         return this;
     }

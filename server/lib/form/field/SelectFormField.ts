@@ -4,8 +4,8 @@ export class SelectFormField extends AbstractFormField<string> {
     
     private availableOptions: string[] = [];
     
-    constructor(selection: string) {
-        super(selection);
+    constructor(id: string, selection: string = "") {
+        super(id, selection);
     }
     
     validate() {

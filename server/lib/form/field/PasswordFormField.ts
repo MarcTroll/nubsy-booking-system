@@ -3,8 +3,8 @@ import {IMinLengthFormField} from "~/server/lib/form/field/IMinLengthFormField";
 
 export class PasswordFormField extends AbstractFormField<string> implements IMinLengthFormField {
     
-    constructor(password: string) {
-        super(password);
+    constructor(id : string, password : string) {
+        super(id, password);
     }
     
     validate() {

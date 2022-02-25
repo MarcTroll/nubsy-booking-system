@@ -4,8 +4,8 @@ import {IMaxLengthFormField} from "~/server/lib/form/field/IMaxLengthFormField";
 
 export class TextFormField extends AbstractFormField<string> implements IMinLengthFormField, IMaxLengthFormField {
     
-    constructor(text: string) {
-        super(text);
+    constructor(id: string, text: string = "") {
+        super(id, text);
     }
     
     validate() {

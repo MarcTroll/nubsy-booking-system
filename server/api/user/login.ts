@@ -27,14 +27,12 @@ export default async (req: IncomingMessage, res: ServerResponse) => {
     const body = <LoginRequestBody>(await useBody(req));
     const form = Form.create()
         .addFormField(
-            "emailAddress",
-            new EMailFormField(body.emailAddress)
+            new EMailFormField("emailAddress", body.emailAddress)
                 .setMaxLength(256)
                 .setRequired(true)
         )
         .addFormField(
-            "password",
-            new PasswordFormField(body.password)
+            new PasswordFormField("password", body.password)
                 .setMinLength(3)
                 .setRequired(true)
         );
