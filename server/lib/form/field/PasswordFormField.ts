@@ -1,7 +1,7 @@
 import {AbstractFormField} from "~/server/lib/form/field/AbstractFormField";
 import {IMinLengthFormField} from "~/server/lib/form/field/IMinLengthFormField";
 
-export class PasswordFormField extends AbstractFormField<string> implements IMinLengthFormField {
+export class PasswordFormField extends AbstractFormField<string, string> implements IMinLengthFormField {
     
     constructor(id : string, password : string) {
         super(id, password);
@@ -36,5 +36,9 @@ export class PasswordFormField extends AbstractFormField<string> implements IMin
         return this.minLength === null || this.getValue().length >= this.getMinLength();
     }
     //</editor-fold>
+    
+    getSafeValue(): string {
+        return this.getValue();
+    }
     
 }

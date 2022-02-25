@@ -1,6 +1,6 @@
 import {AbstractFormField} from "~/server/lib/form/field/AbstractFormField";
 
-export class SelectFormField extends AbstractFormField<string> {
+export class SelectFormField extends AbstractFormField<string, string> {
     
     private availableOptions: string[] = [];
     
@@ -29,6 +29,10 @@ export class SelectFormField extends AbstractFormField<string> {
     
     getOptions() {
         return this.availableOptions;
+    }
+    
+    getSafeValue(): string {
+        return this.getValue();
     }
     
 }

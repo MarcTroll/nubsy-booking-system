@@ -2,7 +2,7 @@ import {AbstractFormField} from "~/server/lib/form/field/AbstractFormField";
 import {ValidationUtil} from "~/server/lib/util/ValidationUtil";
 import {IMaxLengthFormField} from "~/server/lib/form/field/IMaxLengthFormField";
 
-export class EMailFormField extends AbstractFormField<string> implements IMaxLengthFormField {
+export class EMailFormField extends AbstractFormField<string, string> implements IMaxLengthFormField {
     
     constructor(id : string, emailAddress : string) {
         super(id, emailAddress);
@@ -41,5 +41,9 @@ export class EMailFormField extends AbstractFormField<string> implements IMaxLen
         return this.maxLength === null || this.getValue().length <= this.getMaxLength();
     }
     //</editor-fold>
+    
+    getSafeValue(): string {
+        return this.getValue();
+    }
     
 }

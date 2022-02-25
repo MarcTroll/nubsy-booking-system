@@ -2,7 +2,7 @@ import {AbstractFormField} from "~/server/lib/form/field/AbstractFormField";
 import {IMinLengthFormField} from "~/server/lib/form/field/IMinLengthFormField";
 import {IMaxLengthFormField} from "~/server/lib/form/field/IMaxLengthFormField";
 
-export class TextFormField extends AbstractFormField<string> implements IMinLengthFormField, IMaxLengthFormField {
+export class TextFormField extends AbstractFormField<string, string> implements IMinLengthFormField, IMaxLengthFormField {
     
     constructor(id: string, text: string = "") {
         super(id, text);
@@ -58,5 +58,9 @@ export class TextFormField extends AbstractFormField<string> implements IMinLeng
         return this.getMaxLength() === null || this.getValue().length <= this.getMaxLength();
     }
     //</editor-fold>
+    
+    getSafeValue(): string {
+        return this.getValue();
+    }
     
 }

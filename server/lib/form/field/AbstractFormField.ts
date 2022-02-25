@@ -1,17 +1,17 @@
 import {AbstractFormFieldId} from "~/server/lib/form/AbstractFormFieldId";
 
-export abstract class AbstractFormField<T> extends AbstractFormFieldId {
+export abstract class AbstractFormField<ValueType, SafeValueType> extends AbstractFormFieldId {
     
-    private value : T;
+    private value : ValueType;
     private required: boolean = false;
     private validationError : string = "";
     
-    protected constructor(formFieldId : string, formFieldValue : T) {
+    protected constructor(formFieldId : string, formFieldValue : ValueType) {
         super(formFieldId);
         this.value = formFieldValue;
     }
     
-    setRequired(required: boolean) : AbstractFormField<T> {
+    setRequired(required: boolean) : AbstractFormField<ValueType, SafeValueType> {
         this.required = required;
         
         return this;
@@ -21,15 +21,17 @@ export abstract class AbstractFormField<T> extends AbstractFormFieldId {
         return this.required;
     }
     
-    setValue(value : T) {
+    setValue(value : ValueType) {
         this.value = value;
         
         return this;
     }
     
-    getValue() : T {
+    getValue() : ValueType {
         return this.value;
     }
+    
+    abstract getSafeValue() : SafeValueType;
     
     setValidationError(validationError : string) : boolean {
         this.validationError = validationError;

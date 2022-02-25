@@ -1,9 +1,22 @@
 import {AbstractFormField} from "~/server/lib/form/field/AbstractFormField";
+import {ValidationUtil} from "~/server/lib/util/ValidationUtil";
 
-export class NumberFormField extends AbstractFormField<number> {
+export class NumberFormField extends AbstractFormField<string, number> {
     
-    constructor(id, number: number) {
+    private decimals: number;
+    
+    constructor(id, number: string) {
         super(id, number);
+    }
+    
+    setDecimals(decimals : number) : NumberFormField {
+        this.decimals = decimals;
+        
+        return this;
+    }
+    
+    getDecimals() {
+        return this.decimals;
     }
     
     validate() {
@@ -11,12 +24,16 @@ export class NumberFormField extends AbstractFormField<number> {
             return false;
         }
         
-        if(isNaN(this.getValue())) {
-            this.setValidationError("ERR_FORM_VALIDATION_NUMBER_INVALID")
+        if(ValidationUtil.isNumber(this.getValue(), this.getDecimals())) {
+            this.setValidationError("ERR_FORM_VALIDATION_NUMBER_INVALID");
             return false;
         }
         
         return true;
+    }
+    
+    getSafeValue(): number {
+        return parseInt(this.getValue());
     }
     
 }
