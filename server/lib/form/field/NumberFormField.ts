@@ -4,7 +4,7 @@ import {IClientFormField} from "~/server/lib/form/field/IClientFormField";
 
 interface IClientNumberFormField extends IClientFormField<number> {
     
-    validation: RegExp;
+    validation: string;
     
 }
 
@@ -49,7 +49,7 @@ export class NumberFormField extends AbstractFormField<string, number> {
             type: "number",
             value: this.getSafeValue(),
             error: this.getValidationError(),
-            validation: ValidationUtil.getNumberValidator(this.getDecimals())
+            validation: ValidationUtil.getNumberValidator(this.getDecimals()).toString()
         };
     }
     

@@ -1,7 +1,7 @@
 export class ValidationUtil {
     
     static getEmailValidator() : RegExp {
-        return /^(?<local>(?:[^<>()[\]\.,;:\s@\"]+(?:\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(?<domain>(?:[^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        return new RegExp(/^(?<local>(?:[^<>()[\]\.,;:\s@\"]+(?:\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(?<domain>(?:[^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
     }
     
     static isEmailAddress(email: string) : boolean {
@@ -14,7 +14,7 @@ export class ValidationUtil {
     
     static getNumberValidator(decimals: number = 0) : RegExp {
         if(decimals <= 0) {
-            return /^(?<integer>[1-9]\d*)$/;
+            return new RegExp(/^(?<integer>[1-9]\d*)$/);
         } else {
             return new RegExp("/^(?<integer>[1-9]\d*)(?<decimal>\.\d{1," + decimals + "})?$/");
         }

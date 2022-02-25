@@ -6,7 +6,7 @@ import {IClientFormField} from "~/server/lib/form/field/IClientFormField";
 interface IClientEmailFormField extends IClientFormField<string> {
     
     maxLength: number;
-    validation: RegExp
+    validation: string
     
 }
 
@@ -61,7 +61,7 @@ export class EmailFormField extends AbstractFormField<string, string> implements
             value: this.getSafeValue(),
             error: this.getValidationError(),
             maxLength: this.getMaxLength(),
-            validation: ValidationUtil.getEmailValidator()
+            validation: ValidationUtil.getEmailValidator().toString()
         };
     }
     
