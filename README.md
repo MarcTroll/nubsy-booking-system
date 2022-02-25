@@ -1,8 +1,10 @@
-# Nubsy - Nuxt 3 Booking System
+# nubsy - Nuxt 3 Booking System
 A basic booking system for sport facilities developed using Nuxt 3. 
 
-Because of the reason that Nuxt 3 as well as the booking system itself are
-currently in beta and there's no stable release until now, you may
+nubsy stands for Nuxt Booking System. It is completely written in [Nuxt 3](https://v3.nuxtjs.org),
+which enables SSR (server-side rendering) for Vue.js 3 while being fast and lightweight.
+
+Because of Nuxt 3 being in beta as well as the booking system itself, you may
 experience some issues setting the software up and keep it running.
 **I don't recommend using this software in production until there is a
 stable release.**
