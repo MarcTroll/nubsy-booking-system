@@ -1,17 +1,22 @@
 import {AbstractFormField} from "~/server/lib/form/field/AbstractFormField";
+import {AbstractFormFieldIdentifier} from "~/server/lib/form/AbstractFormFieldIdentifier";
 
-export class Form {
+export class Form extends AbstractFormFieldIdentifier {
     
     private formFields : Map<string, AbstractFormField<any, any>> = new Map<string, AbstractFormField<any, any>>();
     private validationErrors : Map<string, string> = new Map<string, string>();
 
+    private constructor(id: string) {
+        super(id);
+    }
+    
     /**
      * Creates a new form instance. Could be used as shorthand instead of creating a new object by yourself.
      *
      * @returns {Form} A new form instance.
      * */
-    static create() {
-        return new Form();
+    static create(id: string) {
+        return new Form(id);
     }
     
     /**
@@ -21,6 +26,10 @@ export class Form {
      * @returns {Form} Returns the form instance.
      * */
     addFormField(formField : AbstractFormField<any, any>) : Form {
+        if(this.getFormField(formField.getId()) !== null) {
+            throw new Error(`Form field with id ${formField.getId()} already exists. Use another identifier.`)
+        }
+        
         this.formFields.set(formField.getId(), formField);
         
         return this;
@@ -59,6 +68,16 @@ export class Form {
         });
         
         return this.validationErrors.size === 0;
+    }
+    
+    getClientForm() {
+        const clientFormFields = {};
+        
+        this.formFields.forEach((formField, key) => {
+            clientFormFields[key] = formField.getClientField()
+        });
+        
+        return clientFormFields;
     }
     
 }
