@@ -197,6 +197,12 @@ form .formError .formErrorDescription {
   background: #D40000;
   color: white;
 }
+form .formWarning {
+  display: block;
+  padding: 6px 20px 4px;
+  background: #ff8000;
+  color: white;
+}
 
 table {
   border-collapse: separate;

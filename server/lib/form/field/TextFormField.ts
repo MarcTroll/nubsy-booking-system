@@ -21,11 +21,15 @@ export class TextFormField extends AbstractFormField<string, string> implements 
             return false;
         }
         
+        if(this.isRequired() && this.getSafeValue().length === 0) {
+            return this.setValidationError("ERR_FORM_VALIDATION_VALUE_UNDEFINED");
+        }
+        
         if(!this.validateMinLength()) {
-            return this.setValidationError("ERR_FORM_VALIDATION_TEXT_TOO_SHORT:" + this.getMinLength());
+            return this.setValidationError("ERR_FORM_VALIDATION_TEXT_TOO_SHORT");
         }
         if(!this.validateMaxLength()) {
-            return this.setValidationError("ERR_FORM_VALIDATION_TEXT_TOO_LONG:" + this.getMaxLength());
+            return this.setValidationError("ERR_FORM_VALIDATION_TEXT_TOO_LONG");
         }
         
         return true;

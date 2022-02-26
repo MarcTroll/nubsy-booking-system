@@ -1,5 +1,6 @@
 import {AbstractFormField} from "~/server/lib/form/field/AbstractFormField";
 import {AbstractFormFieldIdentifier} from "~/server/lib/form/AbstractFormFieldIdentifier";
+import {Formatting} from "~/server/lib/system/log/Formatting";
 
 export class Form extends AbstractFormFieldIdentifier {
     
@@ -45,6 +46,25 @@ export class Form extends AbstractFormFieldIdentifier {
     }
     
     /**
+     * Apply all body values to form input fields. If applying a body value is not possible, it will be logged in the
+     * console. There won't be an error, because of the reason, that the body may (but shouldn't) be larger than the
+     * regarding form.
+     *
+     * @param body The body of the request.
+     * */
+    applyBody(body) {
+        Object.keys(body).forEach(key => {
+            let formField = this.getFormField(key);
+            
+            if(formField === null) {
+                console.log(`${Formatting.COLOR_RED}Error:${Formatting.RESET} Failed to apply form body key '${key}' to form '${this.getId()}'`);
+            } else {
+                formField.setValue(body[key]);
+            }
+        })
+    }
+    
+    /**
      * Returns a key-value map containing all field errors that happened during validation. If form fields haven't been
      * validated yet, the Map will be empty, so don't miss to call {@link Form#validate} before.
      *
@@ -52,6 +72,20 @@ export class Form extends AbstractFormFieldIdentifier {
      * */
     getValidationErrors() : Map<string, string> {
         return this.validationErrors;
+    }
+    
+    /**
+     * Returns the packet that should be sent by default if the form encounters any errors regarding form field
+     * validation.
+     *
+     * @returns {Object} The response packet that is used to handle errors in the frontend.
+     * */
+    getFormValidationErrorPacket() {
+        return {
+            status: "error",
+            code: "ERR_FORM_INVALID",
+            formErrors: Object.fromEntries(this.getValidationErrors())
+        }
     }
     
     /**

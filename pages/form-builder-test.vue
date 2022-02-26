@@ -4,6 +4,8 @@
 
 <template>
     <div>
-        <NubsyForm form-url="/api/test" additional-class-list="grid grid-2"></NubsyForm>
+        <NubsyForm form-url="/api/test" additional-class-list="grid grid-2">
+
+        </NubsyForm>
     </div>
 </template>
