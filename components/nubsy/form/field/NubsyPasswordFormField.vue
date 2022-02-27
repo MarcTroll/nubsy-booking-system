@@ -16,7 +16,6 @@ const inputWarning = ref("");
 
 // TODO: Change that when @nuxt-community/i18n is available for nuxt 3
 function translateError(error) {
-    console.log(error)
     switch(error) {
         case "ERR_FORM_VALIDATION_VALUE_UNDEFINED":
             return "Diese Feld muss ausgefüllt werden.";
