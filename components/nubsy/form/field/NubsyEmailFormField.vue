@@ -35,8 +35,6 @@ function validate() {
     formFieldData.error = "";
     inputWarning.value = "";
 
-    console.log(formFieldData.required, formFieldData.value.length)
-
     if(!formFieldData || (formFieldData.required && formFieldData.value.length === 0)) {
         inputWarning.value = "ERR_FORM_VALIDATION_VALUE_UNDEFINED";
         return;
