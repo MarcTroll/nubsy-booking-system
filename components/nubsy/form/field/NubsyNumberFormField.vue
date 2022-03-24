@@ -36,10 +36,6 @@ function validate() {
     formFieldData.error = "";
     inputWarning.value = "";
 
-    // TODO: https://stackoverflow.com/questions/39154255/converting-regexp-to-string-then-back-to-regexp
-    console.log(formFieldData.value, new RegExp(formFieldData.validation[0], formFieldData.validation[1]));
-    console.log(formFieldData.value.match(new RegExp(formFieldData.validation[0], formFieldData.validation[1])));
-
     if(!formFieldData || (formFieldData.required && formFieldData.value.length === 0)) {
         inputWarning.value = "ERR_FORM_VALIDATION_VALUE_UNDEFINED";
         return;
@@ -48,15 +44,19 @@ function validate() {
         inputWarning.value = "ERR_FORM_VALIDATION_NUMBER_INVALID";
     }
 }
+
+function count(by : number) {
+    formFieldData.value = (parseFloat(formFieldData.value.replace(",", ".")) + by).toString();
+}
 </script>
 
 <template>
     <div :class="{formError: formFieldData.error}" :id="formFieldData.id + 'Field'">
         <label :for="formFieldData.id" v-if="formFieldData.label">{{formFieldData.label}}</label>
         <div class="fieldInputContainer">
-            <div class="counterButton">-</div>
+            <div class="counterButton" @click="count(-1)">-</div>
             <input type="text" :id="formFieldData.id" v-model="formFieldData.value" @blur="validate()">
-            <div class="counterButton">+</div>
+            <div class="counterButton" @click="count(1)">+</div>
         </div>
         <div class="formWarning" v-if="!formFieldData.error && inputWarning">{{translateError(inputWarning)}}</div>
         <div class="formErrorDescription" v-if="formFieldData.error">{{translateError(formFieldData.error)}}</div>
@@ -77,6 +77,7 @@ function validate() {
         color: white;
         background-color: #005a91;
         cursor: pointer;
+        user-select: none;
     }
 
     > input {
