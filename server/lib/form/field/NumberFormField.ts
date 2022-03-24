@@ -2,15 +2,16 @@ import {AbstractFormField} from "~/server/lib/form/field/AbstractFormField";
 import {ValidationUtil} from "~/server/lib/util/ValidationUtil";
 import {IClientFormField} from "~/server/lib/form/field/IClientFormField";
 
-interface IClientNumberFormField extends IClientFormField<number> {
+interface IClientNumberFormField extends IClientFormField<string> {
     
-    validation: string;
+    validation: string[];
+    decimals: number;
     
 }
 
 export class NumberFormField extends AbstractFormField<string, number> {
     
-    private decimals: number;
+    private decimals: number | null = null;
     
     constructor(id, number: string) {
         super(id, number);
@@ -44,13 +45,16 @@ export class NumberFormField extends AbstractFormField<string, number> {
     }
     
     getClientField(): IClientNumberFormField {
+        let validationParts = /\/(.*)\/(.*)/.exec(ValidationUtil.getNumberValidator(this.getDecimals()).toString());
+        
         return {
             id: this.getId(),
             type: "number",
             label: this.getLabel(),
-            value: this.getSafeValue(),
+            value: this.getSafeValue().toString(),
             error: this.getValidationError(),
-            validation: ValidationUtil.getNumberValidator(this.getDecimals()).toString()
+            decimals: this.getDecimals(),
+            validation: [validationParts[1], validationParts[2]]
         };
     }
     

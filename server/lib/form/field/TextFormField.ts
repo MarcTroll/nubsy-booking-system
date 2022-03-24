@@ -49,7 +49,7 @@ export class TextFormField extends AbstractFormField<string, string> implements 
     }
     
     validateMinLength() {
-        return this.getMinLength() === null || this.getValue().length >= this.getMinLength();
+        return this.getMinLength() === null || this.getSafeValue().length >= this.getMinLength();
     }
     //</editor-fold>
     
@@ -67,12 +67,12 @@ export class TextFormField extends AbstractFormField<string, string> implements 
     }
     
     validateMaxLength() {
-        return this.getMaxLength() === null || this.getValue().length <= this.getMaxLength();
+        return this.getMaxLength() === null || this.getSafeValue().length <= this.getMaxLength();
     }
     //</editor-fold>
     
     getSafeValue(): string {
-        return this.getValue();
+        return this.getValue().trim();
     }
     
     getClientField(): IClientTextFormField {

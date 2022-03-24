@@ -40,7 +40,7 @@ export class PasswordFormField extends AbstractFormField<string, string> impleme
     }
     
     validateMinLength() {
-        return this.minLength === null || this.getValue().length >= this.getMinLength();
+        return this.minLength === null || this.getSafeValue().length >= this.getMinLength();
     }
     //</editor-fold>
     

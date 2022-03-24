@@ -6,7 +6,7 @@ import {IClientFormField} from "~/server/lib/form/field/IClientFormField";
 interface IClientEmailFormField extends IClientFormField<string> {
     
     maxLength: number;
-    validation: string
+    validation: string[] // representation of the regex, where the first element will be the regex-source, while the second element will be the regex-modifiers
     
 }
 
@@ -25,7 +25,7 @@ export class EmailFormField extends AbstractFormField<string, string> implements
             return this.setValidationError("ERR_FORM_VALIDATION_EMAIL_TOO_LONG");
         }
         
-        if(!ValidationUtil.isEmailAddress(this.getValue())) {
+        if(!ValidationUtil.isEmailAddress(this.getSafeValue())) {
             return this.setValidationError("ERR_FORM_VALIDATION_EMAIL_INVALID");
         }
         
@@ -46,15 +46,18 @@ export class EmailFormField extends AbstractFormField<string, string> implements
     }
     
     validateMaxLength() {
-        return this.maxLength === null || this.getValue().length <= this.getMaxLength();
+        return this.maxLength === null || this.getSafeValue().length <= this.getMaxLength();
     }
     //</editor-fold>
     
+    // TODO: rewrite html special chars
     getSafeValue(): string {
-        return this.getValue();
+        return this.getValue().trim();
     }
     
     getClientField(): IClientEmailFormField {
+        let validationParts = /\/(.*)\/(.*)/.exec(ValidationUtil.getEmailValidator().toString());
+        
         return {
             id: this.getId(),
             type: "email",
@@ -62,7 +65,7 @@ export class EmailFormField extends AbstractFormField<string, string> implements
             value: this.getSafeValue(),
             error: this.getValidationError(),
             maxLength: this.getMaxLength(),
-            validation: ValidationUtil.getEmailValidator().toString()
+            validation: [validationParts[1], validationParts[2]]
         };
     }
     

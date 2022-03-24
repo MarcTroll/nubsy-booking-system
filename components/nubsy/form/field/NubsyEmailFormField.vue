@@ -6,7 +6,7 @@ interface EmailFormField {
     value: string | null;
     error: string;
     maxLength: number;
-    validation: string; // should be regex
+    validation: string[]; // should be regex
 }
 
 const props = defineProps<{
@@ -41,7 +41,7 @@ function validate() {
     if((formFieldData.maxLength && formFieldData.value.length > formFieldData.maxLength) || formFieldData.value.length > 256) {
         inputWarning.value = "ERR_FORM_VALIDATION_EMAIL_TOO_LONG";
     }
-    if(formFieldData.value.match(new RegExp(formFieldData.validation)) === null) {
+    if(formFieldData.value.match(new RegExp(formFieldData.validation[0], formFieldData.validation[1])) === null) {
         inputWarning.value = "ERR_FORM_VALIDATION_EMAIL_INVALID";
     }
 }
