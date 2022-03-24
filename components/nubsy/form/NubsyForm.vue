@@ -131,5 +131,10 @@
             <input class="button primary" type="submit" value="Absenden">
             <slot name="formExtraButtons"></slot>
         </div>
+        <div class="content">
+            <div class="message">
+                Mit <span class="formInputRequired">*</span> markierte Felder sind Pflichtfelder und müssen daher ausgefüllt werden.
+            </div>
+        </div>
     </form>
 </template>

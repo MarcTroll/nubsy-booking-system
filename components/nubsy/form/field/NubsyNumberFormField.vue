@@ -52,7 +52,7 @@ function count(by : number) {
 
 <template>
     <div :class="{formError: formFieldData.error}" :id="formFieldData.id + 'Field'">
-        <label :for="formFieldData.id" v-if="formFieldData.label">{{formFieldData.label}}</label>
+        <label :for="formFieldData.id" v-if="formFieldData.label">{{formFieldData.label}} <span v-if="formFieldData.required" class="formInputRequired">*</span></label>
         <div class="fieldInputContainer">
             <div class="counterButton" @click="count(-1)">-</div>
             <input type="text" :id="formFieldData.id" v-model="formFieldData.value" @blur="validate()">

@@ -44,7 +44,7 @@ function validate() {
 
 <template>
     <div :class="{formError: formFieldData.error}" :id="formFieldData.id + 'Field'">
-        <label :for="formFieldData.id" v-if="formFieldData.label">{{formFieldData.label}}</label>
+        <label :for="formFieldData.id" v-if="formFieldData.label">{{formFieldData.label}} <span v-if="formFieldData.required" class="formInputRequired">*</span></label>
         <input type="password" :id="formFieldData.id" v-model="formFieldData.value" @blur="validate()">
         <div class="formWarning" v-if="!formFieldData.error && inputWarning">{{translateError(inputWarning)}}</div>
         <div class="formErrorDescription" v-if="formFieldData.error">{{translateError(formFieldData.error)}}</div>

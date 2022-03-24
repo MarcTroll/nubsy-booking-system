@@ -138,7 +138,7 @@ strong {
 
 .message {
   padding: 10px 20px;
-  border: 1px solid;
+  border: 1px solid #dedede;
   border-left-width: 5px;
 
   a {
@@ -196,6 +196,10 @@ form {
       box-sizing: border-box;
       width: 100%;
     }
+  }
+
+  .formInputRequired {
+    color: #D40000;
   }
 
   .formSubmit {

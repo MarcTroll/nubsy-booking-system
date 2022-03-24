@@ -127,7 +127,7 @@ strong {
 
 .message {
   padding: 10px 20px;
-  border: 1px solid;
+  border: 1px solid #dedede;
   border-left-width: 5px;
 }
 .message a {
@@ -173,6 +173,9 @@ form .formInputContainer label, form .formInputContainer input, form .formInputC
   display: block;
   box-sizing: border-box;
   width: 100%;
+}
+form .formInputRequired {
+  color: #D40000;
 }
 form .formSubmit {
   text-align: center;
