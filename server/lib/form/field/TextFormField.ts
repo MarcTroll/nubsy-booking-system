@@ -82,6 +82,7 @@ export class TextFormField extends AbstractFormField<string, string> implements 
             label: this.getLabel(),
             value: this.getSafeValue(),
             error: this.getValidationError(),
+            required: this.isRequired(),
             minLength: this.getMinLength(),
             maxLength: this.getMaxLength()
         };

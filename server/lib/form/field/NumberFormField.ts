@@ -53,6 +53,7 @@ export class NumberFormField extends AbstractFormField<string, number> {
             label: this.getLabel(),
             value: this.getSafeValue().toString(),
             error: this.getValidationError(),
+            required: this.isRequired(),
             decimals: this.getDecimals(),
             validation: [validationParts[1], validationParts[2]]
         };

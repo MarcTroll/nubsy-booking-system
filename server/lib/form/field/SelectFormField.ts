@@ -49,6 +49,7 @@ export class SelectFormField extends AbstractFormField<string, string> {
             label: this.getLabel(),
             value: this.getSafeValue(),
             error: this.getValidationError(),
+            required: this.isRequired(),
             options: this.getOptions()
         };
     }

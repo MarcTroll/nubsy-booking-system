@@ -5,6 +5,7 @@ interface EmailFormField {
     label: string | null;
     value: string | null;
     error: string;
+    required: boolean;
     maxLength: number;
     validation: string[]; // should be regex
 }
@@ -34,15 +35,19 @@ function validate() {
     formFieldData.error = "";
     inputWarning.value = "";
 
-    if(!formFieldData || formFieldData.value.length === 0) {
+    console.log(formFieldData.required, formFieldData.value.length)
+
+    if(!formFieldData || (formFieldData.required && formFieldData.value.length === 0)) {
         inputWarning.value = "ERR_FORM_VALIDATION_VALUE_UNDEFINED";
         return;
     }
     if((formFieldData.maxLength && formFieldData.value.length > formFieldData.maxLength) || formFieldData.value.length > 256) {
         inputWarning.value = "ERR_FORM_VALIDATION_EMAIL_TOO_LONG";
+        return;
     }
     if(formFieldData.value.match(new RegExp(formFieldData.validation[0], formFieldData.validation[1])) === null) {
         inputWarning.value = "ERR_FORM_VALIDATION_EMAIL_INVALID";
+        return;
     }
 }
 </script>

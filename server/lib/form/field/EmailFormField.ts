@@ -20,6 +20,10 @@ export class EmailFormField extends AbstractFormField<string, string> implements
         if(!super.validate()) {
             return false;
         }
+        
+        if(this.isRequired() && this.getSafeValue().length === 0) {
+            return this.setValidationError("ERR_FORM_VALIDATION_VALUE_UNDEFINED");
+        }
     
         if(!this.validateMaxLength()) {
             return this.setValidationError("ERR_FORM_VALIDATION_EMAIL_TOO_LONG");
@@ -64,6 +68,7 @@ export class EmailFormField extends AbstractFormField<string, string> implements
             label: this.getLabel(),
             value: this.getSafeValue(),
             error: this.getValidationError(),
+            required: this.isRequired(),
             maxLength: this.getMaxLength(),
             validation: [validationParts[1], validationParts[2]]
         };

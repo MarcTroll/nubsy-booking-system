@@ -5,5 +5,6 @@ export interface IClientFormField<ValueType> {
     type: string;
     value: ValueType;
     error: string;
+    required: boolean;
     
 }

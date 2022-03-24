@@ -11,7 +11,7 @@ export default async (req: any, res: any) => {
                 .setValue("Test")
                 .setLabel("Test-Label")
                 .setMaxLength(16)
-                .setRequired(false)
+                .setRequired(true)
         ).addFormField(
             new NumberFormField("number", "9")
                 .setRequired(true)

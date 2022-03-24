@@ -5,6 +5,7 @@ interface NumberFormField {
     label: string | null;
     value: string | null;
     error: string;
+    required: boolean;
     decimals: number;
     validation: string[]; // should be regex
 }
@@ -39,7 +40,7 @@ function validate() {
     console.log(formFieldData.value, new RegExp(formFieldData.validation[0], formFieldData.validation[1]));
     console.log(formFieldData.value.match(new RegExp(formFieldData.validation[0], formFieldData.validation[1])));
 
-    if(!formFieldData || formFieldData.value.length === 0) {
+    if(!formFieldData || (formFieldData.required && formFieldData.value.length === 0)) {
         inputWarning.value = "ERR_FORM_VALIDATION_VALUE_UNDEFINED";
         return;
     }

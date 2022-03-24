@@ -5,6 +5,7 @@ interface PasswordFormField {
     label: string | null;
     value: string | null;
     error: string;
+    required: boolean;
     minLength: number;
 }
 
@@ -31,7 +32,7 @@ function validate() {
     formFieldData.error = "";
     inputWarning.value = "";
 
-    if(!formFieldData || formFieldData.value.length === 0) {
+    if(!formFieldData || (formFieldData.required && formFieldData.value.length === 0)) {
         inputWarning.value = "ERR_FORM_VALIDATION_VALUE_UNDEFINED";
         return;
     }
