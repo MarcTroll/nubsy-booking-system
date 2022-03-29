@@ -32,7 +32,7 @@ export class NumberFormField extends AbstractFormField<string, number> {
             return false;
         }
         
-        if(ValidationUtil.isNumber(this.getValue(), this.getDecimals())) {
+        if(!ValidationUtil.isNumber(this.getValue(), this.getDecimals())) {
             this.setValidationError("ERR_FORM_VALIDATION_NUMBER_INVALID");
             return false;
         }
@@ -45,7 +45,7 @@ export class NumberFormField extends AbstractFormField<string, number> {
     }
     
     getClientField(): IClientNumberFormField {
-        let validationParts = /\/(.*)\/(.*)/.exec(ValidationUtil.getNumberValidator(this.getDecimals()).toString());
+        let validationParts = /\/(.*)\/(.*)/.exec(ValidationUtil.getNumberValidator().toString());
         
         return {
             id: this.getId(),

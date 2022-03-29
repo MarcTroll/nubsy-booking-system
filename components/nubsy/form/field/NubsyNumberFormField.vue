@@ -40,13 +40,26 @@ function validate() {
         inputWarning.value = "ERR_FORM_VALIDATION_VALUE_UNDEFINED";
         return;
     }
-    if(formFieldData.value.match(new RegExp(formFieldData.validation[0], formFieldData.validation[1])) === null) {
+
+    formFieldData.value = formFieldData.value.replaceAll(",", ".");
+
+    let numberValidator = new RegExp(formFieldData.validation[0], formFieldData.validation[1]).exec(formFieldData.value);
+    if(numberValidator === null) {
         inputWarning.value = "ERR_FORM_VALIDATION_NUMBER_INVALID";
+        return;
+    }
+
+    if(numberValidator.groups.decimal !== undefined) {
+        if(numberValidator.groups.decimal.length > formFieldData.decimals) {
+            inputWarning.value = "ERR_FORM_VALIDATION_NUMBER_INVALID";
+            return;
+        }
     }
 }
 
 function count(by : number) {
     formFieldData.value = (parseFloat(formFieldData.value.replace(",", ".")) + by).toString();
+    validate();
 }
 </script>
 

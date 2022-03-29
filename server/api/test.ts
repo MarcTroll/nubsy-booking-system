@@ -14,6 +14,7 @@ export default async (req: any, res: any) => {
                 .setRequired(true)
         ).addFormField(
             new NumberFormField("number", "9")
+                .setDecimals(3)
                 .setRequired(true)
         )
     

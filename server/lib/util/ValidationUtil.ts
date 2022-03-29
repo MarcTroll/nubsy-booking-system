@@ -12,18 +12,24 @@ export class ValidationUtil {
         return email.match(this.getEmailValidator()) !== null;
     }
     
-    static getNumberValidator(decimals: number = 0) : RegExp {
-        if(decimals <= 0) {
-            return new RegExp(/^(?<integer>[1-9]\d*)$/);
-        } else {
-            return new RegExp("/^(?<integer>[1-9]\d*)(?<decimal>\.\d{1," + decimals + "})?$/");
-        }
+    static getNumberValidator() : RegExp {
+        return new RegExp(/^(?<integer>[1-9]\d*)(\.(?<decimal>\d+)?)?$/);
     }
     
     static isNumber(number : string, decimals: number = 0) {
         number = number.replaceAll(",", ".");
         
-        return number.match(this.getNumberValidator(decimals)) !== null;
+        let numberValidator = this.getNumberValidator().exec(number);
+        if(numberValidator === null) {
+            return false;
+        }
+        
+        if(numberValidator.groups.decimal !== undefined) {
+            if(numberValidator.groups.decimal.length > decimals) {
+                return false;
+            }
+        }
+        return true;
     }
     
 }

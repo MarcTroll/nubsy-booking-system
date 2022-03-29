@@ -33,6 +33,7 @@
     let _timer = null;
 
     function resetFormErrors() {
+        formError.value = "";
         Object.keys(form.value).forEach(key => {
             form.value[key].error = "";
         });
