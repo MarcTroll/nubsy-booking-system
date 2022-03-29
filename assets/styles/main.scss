@@ -196,6 +196,14 @@ form {
       box-sizing: border-box;
       width: 100%;
     }
+
+    .formFieldContainer {
+      @media all and (max-width: 768px) {
+        &:not(:first-child) {
+          margin-top: 20px;
+        }
+      }
+    }
   }
 
   .formInputRequired {

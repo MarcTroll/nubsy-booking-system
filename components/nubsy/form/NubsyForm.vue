@@ -119,7 +119,7 @@
         </div>
         <div class="content formInputContainer">
             <div :class="additionalClassList">
-                <div v-for="(formField, formFieldId) of form" :id="`${formFieldId}Container`">
+                <div v-for="(formField, formFieldId) of form" :id="`${formFieldId}Container`" class="formFieldContainer">
                     <NubsyTextFormField v-if="formField.type === 'text'" :field="formField"></NubsyTextFormField>
                     <NubsyNumberFormField v-else-if="formField.type === 'number'" :field="formField"></NubsyNumberFormField>
                     <NubsyEmailFormField v-else-if="formField.type === 'email'" :field="formField"></NubsyEmailFormField>
