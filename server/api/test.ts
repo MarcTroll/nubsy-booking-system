@@ -7,14 +7,13 @@ import {EmailFormField} from "~/server/lib/form/field/EmailFormField";
 export default async (req: any, res: any) => {
     const form = Form.create("testForm")
         .addFormField(
-            new EmailFormField("name", "")
-                .setValue("Test")
-                .setLabel("Test-Label")
-                .setMaxLength(16)
+            new EmailFormField("name", "ch@nge.me")
+                .setLabel("Email-Label")
                 .setRequired(true)
         ).addFormField(
             new NumberFormField("number", "9")
-                .setDecimals(3)
+                .setLabel("Füllmenge")
+                .setDecimals(2)
                 .setRequired(true)
         )
     
