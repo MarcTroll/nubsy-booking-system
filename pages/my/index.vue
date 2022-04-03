@@ -1,5 +1,6 @@
 <script lang="ts" setup>
     import {useBreadcrumb} from "~/composables/useBreadcrumb";
+    import NubsyAuthenticatedContent from "~/components/nubsy/authentication/NubsyAuthenticatedContent.vue";
 
     useTitle("Mein Konto");
 
@@ -11,7 +12,7 @@
 
     let accountInformation = (await $fetch("/api/user/account/get", {
         headers: useRequestHeaders()
-    })).fields["user"];
+    }));
 
     function translateSalutation(salutation) {
         if(salutation === "male") {
@@ -24,7 +25,7 @@
 </script>
 
 <template>
-    <div>
+    <NubsyAuthenticatedContent permission="user.account.canEdit">
         <div class="content">
             <h2>
                 Mein Konto
@@ -41,16 +42,16 @@
                 <div class="grid grid-4">
                     <p>
                         <strong>Anrede:</strong><br>
-                        {{translateSalutation(accountInformation.salutation)}} {{accountInformation.forename}} {{accountInformation.surname}}
+                        {{translateSalutation(accountInformation.user.salutation)}} {{accountInformation.user.forename}} {{accountInformation.user.surname}}
                     </p>
                     <p>
                         <strong>Adresse:</strong><br>
-                        {{accountInformation.street}}<br>
-                        {{accountInformation.city}}
+                        {{accountInformation.user.street}}<br>
+                        {{accountInformation.user.city}}
                     </p>
                     <p>
                         <strong>Telefon-/Handynummer:</strong><br>
-                        +49 123 4567890
+                        {{accountInformation.user.phone}}
                     </p>
                     <p>
                         <NuxtLink to="/my/accounts" class="button block">
@@ -76,7 +77,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </NubsyAuthenticatedContent>
 </template>
 
 <style lang="scss">

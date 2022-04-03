@@ -4,6 +4,13 @@ import {BookingLib} from "~/server/lib/BookingLib";
 import {PoolConnection, RowDataPacket} from "mysql2/promise";
 import {useMethod} from "h3";
 import {NubsyIncomingMessage} from "~/server/lib/system/web/NubsyIncomingMessage";
+import {AccessDeniedError} from "~/server/lib/system/web/response/error/AccessDeniedError";
+import {ApiPacketStatus, IApiPacket} from "~/server/lib/system/web/response/IApiPacket";
+
+interface UserAccountGetResponsePacket extends IApiPacket {
+    status: ApiPacketStatus.SUCCESS;
+    user: Object;
+}
 
 export default async (req: NubsyIncomingMessage, res: ServerResponse) => {
     if(useMethod(req) !== "GET") {
@@ -13,33 +20,28 @@ export default async (req: NubsyIncomingMessage, res: ServerResponse) => {
         return;
     }
     
-    if(!req.sessionID) {
-        res.statusCode = 403;
-        res.end("Forbidden");
-        
-        return;
+    if(!req.sessionID || req.userID < 0) {
+        return AccessDeniedError.generatePacket();
     }
     
     const connection : PoolConnection = await BookingLib.getDatabase().getConnection();
-    const [user, _] = await connection.execute<RowDataPacket[]>("SELECT salutation, forename, surname, city, street, phone FROM user_account INNER JOIN user_session us ON user_account.userID = us.userID WHERE us.sessionID=? AND user_account.isDefaultAccount", [
-        req.sessionID
+    const [user, _] = await connection.execute<RowDataPacket[]>("SELECT salutation, forename, surname, city, street, phone FROM user_account WHERE userID=? AND user_account.isDefaultAccount", [
+        req.userID
     ]);
     
     if(user.length === 0) {
         await connection.release();
     
-        return {
-            status: "success",
-            fields: []
+        return <UserAccountGetResponsePacket>{
+            status: ApiPacketStatus.SUCCESS,
+            user: null
         };
     }
     
     await connection.release();
     
-    return {
-        status: "success",
-        fields: {
-            user: user[0]
-        }
+    return <UserAccountGetResponsePacket>{
+        status: ApiPacketStatus.SUCCESS,
+        user: user[0]
     }
 }
