@@ -3,13 +3,13 @@ import {IClientFormField} from "~/server/lib/form/field/IClientFormField";
 
 interface IClientSelectFormField extends IClientFormField<string> {
     
-    options: string[];
+    options: Object;
     
 }
 
 export class SelectFormField extends AbstractFormField<string, string> {
     
-    private availableOptions: string[] = [];
+    private availableOptions: Map<string, string> = new Map<string, string>();
     
     constructor(id: string, selection: string = "") {
         super(id, selection);
@@ -20,7 +20,7 @@ export class SelectFormField extends AbstractFormField<string, string> {
             return false;
         }
         
-        if(!this.getOptions().includes(this.getValue())) {
+        if(!this.getOptions().has(this.getValue())) {
             this.setValidationError("ERR_FORM_VALIDATION_SELECTION_UNKNOWN_OPTION");
             return false;
         }
@@ -28,7 +28,7 @@ export class SelectFormField extends AbstractFormField<string, string> {
         return true;
     }
     
-    setOptions(options: string[]) {
+    setOptions(options: Map<string, string>) {
         this.availableOptions = options;
         
         return this;
@@ -50,7 +50,7 @@ export class SelectFormField extends AbstractFormField<string, string> {
             value: this.getSafeValue(),
             error: this.getValidationError(),
             required: this.isRequired(),
-            options: this.getOptions()
+            options: Object.fromEntries(this.getOptions())
         };
     }
     
