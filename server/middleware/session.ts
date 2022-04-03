@@ -2,8 +2,10 @@ import {IncomingMessage, ServerResponse} from "http";
 import {setCookie, useCookie} from "h3";
 import {CookieSerializeOptions} from "cookie-es";
 import {BookingLib} from "~/server/lib/BookingLib";
+import {PoolConnection, RowDataPacket} from "mysql2/promise";
+import {NubsyIncomingMessage} from "~/server/lib/system/web/NubsyIncomingMessage";
 
-export default async (req : IncomingMessage, res: ServerResponse) => {
+export default async (req : NubsyIncomingMessage, res: ServerResponse) => {
     const options : CookieSerializeOptions = {
         httpOnly: true,
         sameSite: "strict",
@@ -14,8 +16,7 @@ export default async (req : IncomingMessage, res: ServerResponse) => {
     let cookieValue = useCookie(req, "sessionID");
     
     // throws an error on failure
-    let connection = await BookingLib.getDatabase().getConnection();
-    await connection.release();
+    let connection : PoolConnection = await BookingLib.getDatabase().getConnection();
 
     if(!cookieValue || !await BookingLib.getSessionHandler().isSession(cookieValue)) {
         const sessionID = await BookingLib.getSessionHandler().createSession(req.socket.remoteAddress, req.headers["user-agent"]);
@@ -30,6 +31,16 @@ export default async (req : IncomingMessage, res: ServerResponse) => {
         setCookie(res, "sessionID", cookieValue, options);
     }
     
-    // @ts-ignore
+    const [user, _] = await connection.execute<RowDataPacket[]>("SELECT userID FROM user_session WHERE sessionID=?", [
+        cookieValue
+    ]);
+    await connection.release();
+    
+    if(user[0].userID !== null) {
+        req.userID = user[0].userID
+    } else {
+        req.userID = -1;
+    }
+    
     req.sessionID = cookieValue;
 }
