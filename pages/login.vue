@@ -1,5 +1,13 @@
 <script lang="ts" setup>
+    import {useBreadcrumb} from "~/composables/useBreadcrumb";
+    import {useTitle} from "~/composables/useTitle";
+
     useTitle("Anmelden");
+
+    useBreadcrumb().value.paths = [{
+        title: "Startseite",
+        link: "/"
+    }];
 
     const loginForm = ref({
         emailAddress: "",
@@ -117,14 +125,12 @@
     </div>
     <div v-else>
         <div class="content">
-            <h2>
-                Anmelden
-            </h2>
-        </div>
-        <div class="content">
-            <div class="message error">
-                Diese Seite kannst du derzeit nicht aufrufen.
-            </div>
+            <h4>
+                Zugriff verweigert
+            </h4>
+            <p v-if="authentication.loggedIn">
+                Du bist bereits angemeldet. <NuxtLink to="/">Zurück zur Startseite</NuxtLink>
+            </p>
         </div>
     </div>
 </template>

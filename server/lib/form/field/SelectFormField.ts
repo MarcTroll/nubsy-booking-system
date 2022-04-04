@@ -9,7 +9,7 @@ interface IClientSelectFormField extends IClientFormField<string> {
 
 export class SelectFormField extends AbstractFormField<string, string> {
     
-    private availableOptions: Map<string, string> = new Map<string, string>();
+    private availableOptions: string[] = [];
     
     constructor(id: string, selection: string = "") {
         super(id, selection);
@@ -20,7 +20,7 @@ export class SelectFormField extends AbstractFormField<string, string> {
             return false;
         }
         
-        if(!this.getOptions().has(this.getValue())) {
+        if(!this.getOptions().includes(this.getSafeValue())) {
             this.setValidationError("ERR_FORM_VALIDATION_SELECTION_UNKNOWN_OPTION");
             return false;
         }
@@ -28,7 +28,7 @@ export class SelectFormField extends AbstractFormField<string, string> {
         return true;
     }
     
-    setOptions(options: Map<string, string>) {
+    setOptions(options: string[]) {
         this.availableOptions = options;
         
         return this;
@@ -50,7 +50,7 @@ export class SelectFormField extends AbstractFormField<string, string> {
             value: this.getSafeValue(),
             error: this.getValidationError(),
             required: this.isRequired(),
-            options: Object.fromEntries(this.getOptions())
+            options: this.getOptions()
         };
     }
     

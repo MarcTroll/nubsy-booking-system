@@ -6,7 +6,7 @@ interface SelectFormField {
     value: string | null;
     error: string;
     required: boolean;
-    options: Object;
+    options: string[];
 }
 
 const props = defineProps<{
@@ -40,8 +40,8 @@ function validate() {
 <template>
     <div :class="{formError: formFieldData.error}" :id="formFieldData.id + 'Field'">
         <label :for="formFieldData.id" v-if="formFieldData.label">{{formFieldData.label}} <span v-if="formFieldData.required" class="formInputRequired">*</span></label>
-        <select :id="formFieldData.id"  v-model="formFieldData.value" @blur="validate()">
-            <option v-for="(value, key) in formFieldData.options" :value="key">{{value}}</option>
+        <select :id="formFieldData.id" v-model="formFieldData.value" @blur="validate()">
+            <option v-for="value in formFieldData.options" :value="value">{{value}}</option>
         </select>
         <div class="formWarning" v-if="!formFieldData.error && inputWarning">{{translateError(inputWarning)}}</div>
         <div class="formErrorDescription" v-if="formFieldData.error">{{translateError(formFieldData.error)}}</div>
