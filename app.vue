@@ -38,6 +38,7 @@ authentication.value.ready = true;
 
 <template>
     <div>
+        <Script src="https://kit.fontawesome.com/f90487fe15.js" crossorigin="anonymous"></Script>
         <Header />
         <NuxtPage v-if="authentication.ready" />
     </div>

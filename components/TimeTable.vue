@@ -51,11 +51,15 @@
 
     const slotClassList = (court) => {
         let classList = {
-            hideCourtSlot: false
+            hideCourtSlot: false,
+            timeTableCell: false
         };
 
         if(typeof court.display === "boolean") {
             classList.hideCourtSlot = !court.display;
+        }
+        if(typeof court.bookable === "boolean") {
+            classList.timeTableCell = court.bookable;
         }
 
         return classList;
@@ -63,6 +67,21 @@
 
     function getRowspan(court) {
         return court.rowspan || 1;
+    }
+
+    let bookingData = ref({
+        courtId: 0,
+        timeSlotStart: 0
+    })
+
+    function startBookingProcess(courtId, timeSlot) {
+        bookingData.value.courtId = courtId;
+        bookingData.value.timeSlotStart = timeSlot;
+    }
+
+    function cancelBookingProcess() {
+        bookingData.value.courtId = 0;
+        bookingData.value.timeSlotStart = 0;
     }
 </script>
 
@@ -94,16 +113,34 @@
                         {{getTime(slotIndex)}}
                     </td>
                     <td v-for="court in slot.courts"
-                        :data-court-id="1"
+                        :data-court-id="court.courtID"
                         :data-time="slotIndex"
                         :rowspan="getRowspan(court)"
-                        :class="slotClassList(court)">
+                        :class="slotClassList(court)"
+                        @click="startBookingProcess(court.courtID, slot.timeID)">
                         <TimeSlot :court="court" />
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
+        <div class="dialog-container" :class="{closed: bookingData.courtId === 0}">
+            <div class="dialog small">
+                <div class="dialog-header">
+                    <div>
+                        Platz buchen
+                    </div>
+                    <div class="close-dialog" @click="cancelBookingProcess()">
+                        <i class="fa fa-times fa-sm"></i>
+                    </div>
+                </div>
+                <div class="dialog-body">
+                    Our background-checks noticed that the connection to the database is broken. Maybe the database is
+                    offline. If the database-connection can be reestablished we will redirect you to Discimus.
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -125,6 +162,12 @@
         td {
             padding: 5px;
             height: 1px;
+            &.timeTableCell {
+                &:hover {
+                    background-color: #eeeeee;
+                    cursor: pointer;
+                }
+            }
         }
     }
 }

@@ -313,6 +313,97 @@ table {
   }
 }
 
+.dialog-container {
+  &:not(.closed) {
+    &:before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.4);
+    }
+  }
+  &.closed {
+    display: none;
+  }
+  &.database-offline-container {
+    .dialog {
+      .dialog-header {
+        background: #D40000;
+      }
+    }
+  }
+  display: flex;
+
+  .dialog {
+    animation: dialogFadeIn 0.3s;
+    animation-fill-mode: forwards;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+
+    z-index: 1010;
+
+    position: fixed;
+
+    &:not(.small) {
+      top: 0;
+      left: 50%;
+
+      width: 97%;
+      height: 92%;
+    }
+    &.small {
+      top: 0;
+      left: 50%;
+
+      width: 500px;
+      max-width: 95%;
+    }
+    background: $white;
+
+    .dialog-header {
+      &.error {
+        background: #D40000;
+      }
+      background: $primary-color;
+      color: #fff;
+      display: grid;
+      grid-template-columns: auto 50px;
+      padding: 20px 25px;
+      font-weight: 500;
+      .description {
+        margin-top: 7px;
+        display: block;
+        font-weight: normal;
+      }
+      .close-dialog {
+        text-align: right;
+        > i {
+          cursor: pointer;
+        }
+      }
+    }
+    .dialog-body {
+      padding: 20px 25px;
+    }
+    .dialog-footer {
+      border-top: 1px solid #ccd1dd;
+      padding: 20px 25px;
+    }
+  }
+}
+
+@keyframes dialogFadeIn {
+  0% {
+    transform: translate(-50%, 80px) scale(0);
+  }
+  100% {
+    transform: translate(-50%, 80px) scale(1);
+  }
+}
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);

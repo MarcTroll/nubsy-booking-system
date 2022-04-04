@@ -90,9 +90,8 @@ export default async (req : IncomingMessage, res : ServerResponse) => {
                 continue;
             }
             
-            if(!timetableGrid[timeSlot].courts[court.courtID]) {
-                timetableGrid[timeSlot].courts[court.courtID].display = true;
-            }
+            timetableGrid[timeSlot].courts[court.courtID].display = true;
+            timetableGrid[timeSlot].courts[court.courtID].bookable = true;
         }
     }
     
