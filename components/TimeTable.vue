@@ -74,14 +74,22 @@
         timeSlotStart: 0
     })
 
-    function startBookingProcess(courtId, timeSlot) {
-        bookingData.value.courtId = courtId;
-        bookingData.value.timeSlotStart = timeSlot;
+    function startBookingProcess(court, timeSlot) {
+        if(typeof court.bookable === "boolean" && court.bookable) {
+            bookingData.value.courtId = court.courtID;
+            bookingData.value.timeSlotStart = timeSlot;
+        } else {
+            // TODO: Display error/handle request when user has administrative permissions or so
+        }
     }
 
     function cancelBookingProcess() {
         bookingData.value.courtId = 0;
         bookingData.value.timeSlotStart = 0;
+    }
+
+    function getCourtDetails(courtId) {
+        return timetable.courts.find(court => court.courtID === courtId);
     }
 </script>
 
@@ -117,14 +125,14 @@
                         :data-time="slotIndex"
                         :rowspan="getRowspan(court)"
                         :class="slotClassList(court)"
-                        @click="startBookingProcess(court.courtID, slot.timeID)">
+                        @click="startBookingProcess(court, slot.timeID)">
                         <TimeSlot :court="court" />
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
-        <div class="dialog-container" :class="{closed: bookingData.courtId === 0}">
+        <div class="dialog-container" v-if="bookingData.courtId !== 0">
             <div class="dialog small">
                 <div class="dialog-header">
                     <div>
@@ -135,8 +143,7 @@
                     </div>
                 </div>
                 <div class="dialog-body">
-                    Our background-checks noticed that the connection to the database is broken. Maybe the database is
-                    offline. If the database-connection can be reestablished we will redirect you to Discimus.
+                    Platz {{getCourtDetails(bookingData.courtId).courtName}} buchen um {{getTime(bookingData.timeSlotStart)}} Uhr
                 </div>
             </div>
         </div>
