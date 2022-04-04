@@ -41,7 +41,7 @@
                 <h4>Mein Account</h4>
                 <div class="grid grid-4">
                     <p>
-                        <strong>Anrede:</strong><br>
+                        <strong>Name:</strong><br>
                         {{translateSalutation(accountInformation.user.salutation)}} {{accountInformation.user.forename}} {{accountInformation.user.surname}}
                     </p>
                     <p>
