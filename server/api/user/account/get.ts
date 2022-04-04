@@ -8,7 +8,7 @@ import {AccessDeniedError} from "~/server/lib/system/web/response/error/AccessDe
 import {ApiPacketStatus, IApiPacket} from "~/server/lib/system/web/response/IApiPacket";
 
 interface UserAccountGetResponsePacket extends IApiPacket {
-    status: ApiPacketStatus.SUCCESS;
+    status: ApiPacketStatus;
     user: Object;
 }
 
@@ -33,7 +33,7 @@ export default async (req: NubsyIncomingMessage, res: ServerResponse) => {
         await connection.release();
     
         return <UserAccountGetResponsePacket>{
-            status: ApiPacketStatus.SUCCESS,
+            status: ApiPacketStatus.ERROR,
             user: null
         };
     }
