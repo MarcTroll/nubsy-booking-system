@@ -19,6 +19,11 @@ export class SelectFormField extends AbstractFormField<string, string> {
         if(!super.validate()) {
             return false;
         }
+    
+        if(this.isRequired() && this.getSafeValue() === "none") {
+            this.setValidationError("ERR_FORM_VALIDATION_VALUE_UNDEFINED");
+            return false;
+        }
         
         if(!this.getOptions().includes(this.getSafeValue())) {
             this.setValidationError("ERR_FORM_VALIDATION_SELECTION_UNKNOWN_OPTION");

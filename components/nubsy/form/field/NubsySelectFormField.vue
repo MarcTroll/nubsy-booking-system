@@ -20,6 +20,8 @@ function translateError(error) {
     switch(error) {
         case "ERR_FORM_VALIDATION_VALUE_UNDEFINED":
             return "Diese Feld muss ausgefüllt werden.";
+        case "ERR_FORM_VALIDATION_SELECTION_UNKNOWN_OPTION":
+            return "Bitte wähle einen Wert aus dieser Liste aus.";
         default:
             return "Ein unbekannter Fehler ist aufgetreten.";
     }
