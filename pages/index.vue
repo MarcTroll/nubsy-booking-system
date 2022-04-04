@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import TimeTable from "~/components/TimeTable.vue";
     import DatePicker from "~/components/DatePicker.vue";
+    import {useBreadcrumb} from "~/composables/useBreadcrumb";
 
     const route = useRoute();
     const router = useRouter();
@@ -37,6 +38,7 @@
     })
 
     const authentication = useAuth();
+    useBreadcrumb().value.paths = [];
 
     function toggleAuthentication() {
         authentication.value.loggedIn = !authentication.value.loggedIn;

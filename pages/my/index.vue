@@ -5,14 +5,17 @@
     useTitle("Mein Konto");
 
     const authentication = useAuth();
-    useBreadcrumb().value.paths = [{
-        title: "Startseite",
-        link: "/"
-    }];
 
-    let accountInformation = (await $fetch("/api/user/account/get", {
+    const accountInformation = (await $fetch("/api/user/account/get", {
         headers: useRequestHeaders()
     }));
+
+    if(accountInformation.status === "success") {
+        useBreadcrumb().value.paths = [{
+            title: "Startseite",
+            link: "/"
+        }];
+    }
 
     function translateSalutation(salutation) {
         if(salutation === "male") {

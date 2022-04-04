@@ -31,7 +31,6 @@ router.beforeResolve(async (newRoute) => {
             });
         }
     }
-    useBreadcrumb().value.paths = [];
 });
 
 authentication.value.ready = true;

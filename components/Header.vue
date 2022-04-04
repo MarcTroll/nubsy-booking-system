@@ -14,9 +14,11 @@
         </header>
         <div class="breadcrumbs" v-if="breadcrumb.paths.length > 0">
             <div class="content">
-                <NuxtLink v-for="path of breadcrumb.paths" :to="path.link" class="breadcrumb">
-                    {{ path.title }}
-                </NuxtLink>
+                <span v-for="path of breadcrumb.paths" class="breadcrumb">
+                    <NuxtLink :to="path.link">
+                        {{ path.title }}
+                    </NuxtLink>
+                </span>
             </div>
         </div>
     </div>
