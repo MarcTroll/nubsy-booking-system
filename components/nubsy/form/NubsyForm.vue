@@ -8,7 +8,8 @@
     interface FormSubmitResponse {
         status: string;
         code?: string; // set if status === "error"
-        formErrors?: Object // set if code === "ERR_FORM_INVALID"
+        formErrors?: Object; // set if code === "ERR_FORM_INVALID"
+        body?: Object; // may be set in any cases
     }
 
     const props = defineProps<{
@@ -79,7 +80,8 @@
                 }, 5000);
 
                 emits("form:submit", {
-                    status: "success"
+                    status: "success",
+                    body: res.body
                 });
             } else if(res.status === "error") {
                 resetFormErrors();

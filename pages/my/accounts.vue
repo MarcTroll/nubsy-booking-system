@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import NubsyForm from "~/components/nubsy/form/NubsyForm.vue";
+import {useAuth} from "~/composables/useAuth";
 
 useTitle("Mein Account");
 useBreadcrumb().value.paths = [{
@@ -11,6 +12,12 @@ useBreadcrumb().value.paths = [{
 }];
 
 const authentication = useAuth();
+
+const updateUser = (event) => {
+    if(event.body && event.body.user) {
+        useAuth().value.user = event.body.user;
+    }
+}
 </script>
 
 <template>
@@ -27,7 +34,7 @@ const authentication = useAuth();
                 Account erstellen.-->Derzeit kannst du nur einen Account erstellen.
             </div>
         </div>
-        <NubsyForm form-url="/api/user/account/edit" additional-class-list="grid grid-5">
+        <NubsyForm form-url="/api/user/account/edit" additional-class-list="grid grid-5" @form:submit="updateUser($event)">
 
         </NubsyForm>
     </div>

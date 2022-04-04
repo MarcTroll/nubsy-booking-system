@@ -20,7 +20,7 @@ export default async (req: NubsyIncomingMessage, res: ServerResponse) => {
         return;
     }
     
-    if(!req.sessionID || req.userID < 0) {
+    if(!req.sessionID || req.userID <= 0) {
         return AccessDeniedError.generatePacket();
     }
     

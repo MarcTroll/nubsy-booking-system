@@ -4,9 +4,9 @@ import {SelectFormField} from "~/server/lib/form/field/SelectFormField";
 import {TextFormField} from "~/server/lib/form/field/TextFormField";
 import {PoolConnection, RowDataPacket} from "mysql2/promise";
 import {BookingLib} from "~/server/lib/BookingLib";
+import {AccessDeniedError} from "~/server/lib/system/web/response/error/AccessDeniedError";
 
 export default async (req: any, res: any) => {
-    
     const form = Form.create("accountEditForm")
         .addFormField(
             new SelectFormField("salutation", "none")
@@ -41,11 +41,15 @@ export default async (req: any, res: any) => {
                 .setRequired(true)
         )
     
+    if(!req.sessionID || req.userID <= 0) {
+        return AccessDeniedError.generatePacket();
+    }
+    
     if(useMethod(req) === "GET") {
         // load data from database into fields
         const connection : PoolConnection = await BookingLib.getDatabase().getConnection();
-        const [user, _] = await connection.execute<RowDataPacket[]>("SELECT salutation, forename, surname, city, street, phone FROM user_account INNER JOIN user_session us ON user_account.userID = us.userID WHERE us.sessionID=? AND user_account.isDefaultAccount", [
-            req.sessionID
+        const [user, _] = await connection.execute<RowDataPacket[]>("SELECT salutation, forename, surname, city, street, phone FROM user_account WHERE userID=? AND user_account.isDefaultAccount", [
+            req.userID
         ]);
     
         await connection.release();
@@ -68,8 +72,40 @@ export default async (req: any, res: any) => {
             return form.getFormValidationErrorPacket();
         }
         
+        const connection : PoolConnection = await BookingLib.getDatabase().getConnection();
+    
+        const [update, _] = await connection.execute<RowDataPacket[]>("INSERT INTO user_account (userID, salutation, forename, surname, city, street, phone, alias, isDefaultAccount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1) ON DUPLICATE KEY UPDATE salutation=?, forename=?, surname=?, city=?, street=?, phone=?, alias=IF(isCustomAlias=0, ?, alias)", [
+            req.userID,
+            form.getFormField("salutation").getSafeValue(),
+            form.getFormField("forename").getSafeValue(),
+            form.getFormField("surname").getSafeValue(),
+            form.getFormField("city").getSafeValue(),
+            form.getFormField("street").getSafeValue(),
+            form.getFormField("phone").getSafeValue(),
+            form.getFormField("forename").getSafeValue() + " " + form.getFormField("surname").getSafeValue(),
+            form.getFormField("salutation").getSafeValue(),
+            form.getFormField("forename").getSafeValue(),
+            form.getFormField("surname").getSafeValue(),
+            form.getFormField("city").getSafeValue(),
+            form.getFormField("street").getSafeValue(),
+            form.getFormField("phone").getSafeValue(),
+            form.getFormField("forename").getSafeValue() + " " + form.getFormField("surname").getSafeValue()
+        ]);
+    
+        const [userAccount, _3] = await connection.execute<RowDataPacket[]>("SELECT userID, alias FROM user_account WHERE userID=?", [
+            req.userID
+        ]);
+    
+        await connection.release();
+        
         return {
-            status: "success"
+            status: "success",
+            body: {
+                user: {
+                    id: userAccount[0].userID,
+                    name: userAccount[0].alias
+                }
+            }
         }
     } else {
         res.statusCode = 405;
