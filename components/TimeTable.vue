@@ -135,7 +135,7 @@
         <div class="dialog-container" v-if="bookingData.courtId !== 0">
             <div class="dialog small">
                 <div class="dialog-header">
-                    <div>
+                    <div class="dialog-title">
                         Platz buchen
                     </div>
                     <div class="close-dialog" @click="cancelBookingProcess()">

@@ -2,20 +2,28 @@
     <div class="datePickerContainer">
         <div v-clickaway="disablePicker" class="datePicker">
             <div class="selectedDate controlCenter">
-                <div class="arrows prev-day" @click="prevDay">&lt;</div>
+                <div class="arrows prev-day" @click="prevDay">
+                    <i class="fa fa-chevron-left"></i>&shy;
+                </div>
                 <div class="currentSelection" @click="togglePicker">
                     {{ dayName }}, {{ selectedDay }}. {{ months[selectedMonth] }} {{ selectedYear }}
                 </div>
-                <div class="arrows next-day" @click="nextDay">&gt;</div>
+                <div class="arrows next-day" @click="nextDay">
+                    &shy;<i class="fa fa-chevron-right"></i>
+                </div>
             </div>
 
             <div v-show="showPicker === true" class="dates">
                 <div class="controlCenter month">
-                    <div class="arrows prev-month" @click="prevMonth">&lt;</div>
+                    <div class="arrows prev-month" @click="prevMonth">
+                        <i class="fa fa-chevron-left"></i>&shy;
+                    </div>
                     <div class="currentSelection">
                         {{ monthName }}
                     </div>
-                    <div class="arrows next-month" @click="nextMonth">&gt;</div>
+                    <div class="arrows next-month" @click="nextMonth">
+                        &shy;<i class="fa fa-chevron-right"></i>
+                    </div>
                 </div>
                 <div class="days">
                     <div v-for="i in days" class="day dayName">
