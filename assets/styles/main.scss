@@ -130,6 +130,10 @@ strong {
       background: $primary-color-dark;
     }
   }
+
+  &.stretch {
+    display: block;
+  }
 }
 
 .block {
@@ -346,6 +350,8 @@ table {
     z-index: 1010;
 
     position: fixed;
+    max-height: calc(90% - 80px);
+    overflow-y: auto;
 
     &:not(.small) {
       top: 0;
@@ -363,14 +369,18 @@ table {
     }
     background: $white;
 
+    .content {
+      width: 100%;
+      max-width: 100%;
+    }
+
     .dialog-header {
       &.error {
         background: #D40000;
       }
       background: $primary-color;
       color: #fff;
-      display: grid;
-      grid-template-columns: auto 50px;
+      display: flex;
       padding: 20px 25px;
       font-weight: 500;
       .description {
@@ -378,11 +388,14 @@ table {
         display: block;
         font-weight: normal;
       }
+      .dialog-title {
+        flex: 1 auto;
+      }
       .close-dialog {
-        text-align: right;
-        > i {
-          cursor: pointer;
-        }
+        flex: 0 0 auto;
+        cursor: pointer;
+        padding: 0 6px;
+        margin-right: -6px;
       }
     }
     .dialog-body {

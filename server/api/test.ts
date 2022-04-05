@@ -1,5 +1,5 @@
 import {Form} from "~/server/lib/form/Form";
-import {useBody, useMethod} from "h3";
+import {useBody, useMethod, useQuery} from "h3";
 import {NumberFormField} from "~/server/lib/form/field/NumberFormField";
 import {EmailFormField} from "~/server/lib/form/field/EmailFormField";
 
@@ -15,6 +15,8 @@ export default async (req: any, res: any) => {
                 .setDecimals(2)
                 .setRequired(true)
         )
+    
+    console.log(useQuery(req))
     
     if(useMethod(req) === "GET") {
         return form.getClientForm();

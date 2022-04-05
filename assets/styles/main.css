@@ -120,6 +120,9 @@ strong {
 .button.primary:hover {
   background: #004a78;
 }
+.button.stretch {
+  display: block;
+}
 
 .block {
   display: block;
@@ -288,6 +291,8 @@ table tr td:not(:last-child) {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   z-index: 1010;
   position: fixed;
+  max-height: calc(90% - 80px);
+  overflow-y: auto;
   background: #ffffff;
 }
 .dialog-container .dialog:not(.small) {
@@ -302,11 +307,14 @@ table tr td:not(:last-child) {
   width: 500px;
   max-width: 95%;
 }
+.dialog-container .dialog .content {
+  width: 100%;
+  max-width: 100%;
+}
 .dialog-container .dialog .dialog-header {
   background: #005a91;
   color: #fff;
-  display: grid;
-  grid-template-columns: auto 50px;
+  display: flex;
   padding: 20px 25px;
   font-weight: 500;
 }
@@ -318,11 +326,14 @@ table tr td:not(:last-child) {
   display: block;
   font-weight: normal;
 }
-.dialog-container .dialog .dialog-header .close-dialog {
-  text-align: right;
+.dialog-container .dialog .dialog-header .dialog-title {
+  flex: 1 auto;
 }
-.dialog-container .dialog .dialog-header .close-dialog > i {
+.dialog-container .dialog .dialog-header .close-dialog {
+  flex: 0 0 auto;
   cursor: pointer;
+  padding: 0 6px;
+  margin-right: -6px;
 }
 .dialog-container .dialog .dialog-body {
   padding: 20px 25px;

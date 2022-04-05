@@ -1,5 +1,8 @@
 <script lang="ts" setup>
+    import {useAuth} from "~/composables/useAuth";
+
     let _timer = null;
+    let authentication = useAuth();
 
     interface DateTimeObject {
         time: number
@@ -91,6 +94,10 @@
     function getCourtDetails(courtId) {
         return timetable.courts.find(court => court.courtID === courtId);
     }
+
+    function getBookingFormUrl() {
+        return `/api/test?courtID=${bookingData.value.courtId}&timeSlotStart=${bookingData.value.timeSlotStart}`
+    }
 </script>
 
 <template>
@@ -102,33 +109,33 @@
 
             <table class="calendar">
                 <thead>
-                <tr>
-                    <td class="calendarTime">
-                        <span>
-                            Zeit
-                        </span>
-                    </td>
-                    <td v-for="court of timetable.courts">
-                        <span>
-                            Platz {{court.courtName}}
-                        </span>
-                    </td>
-                </tr>
+                    <tr>
+                        <td class="calendarTime">
+                            <span>
+                                Zeit
+                            </span>
+                        </td>
+                        <td v-for="court of timetable.courts">
+                            <span>
+                                Platz {{court.courtName}}
+                            </span>
+                        </td>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(slot, slotIndex) in timetableRepresentation.grid" :key="slot.timeID">
-                    <td class="calendarTime">
-                        {{getTime(slotIndex)}}
-                    </td>
-                    <td v-for="court in slot.courts"
-                        :data-court-id="court.courtID"
-                        :data-time="slotIndex"
-                        :rowspan="getRowspan(court)"
-                        :class="slotClassList(court)"
-                        @click="startBookingProcess(court, slot.timeID)">
-                        <TimeSlot :court="court" />
-                    </td>
-                </tr>
+                    <tr v-for="(slot, slotIndex) in timetableRepresentation.grid" :key="slot.timeID">
+                        <td class="calendarTime">
+                            {{getTime(slotIndex)}}
+                        </td>
+                        <td v-for="court in slot.courts"
+                            :data-court-id="court.courtID"
+                            :data-time="slotIndex"
+                            :rowspan="getRowspan(court)"
+                            :class="slotClassList(court)"
+                            @click="startBookingProcess(court, slot.timeID)">
+                            <TimeSlot :court="court" />
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -144,10 +151,20 @@
                 </div>
                 <div class="dialog-body">
                     Platz {{getCourtDetails(bookingData.courtId).courtName}} buchen um {{getTime(bookingData.timeSlotStart)}} Uhr
+                    <div v-if="!authentication.loggedIn">
+                        Du musst dich anmelden, um Plätze buchen zu können.
+                    </div>
+                    <NubsyForm :form-url="getBookingFormUrl()" additional-class-list="grid grid-2" v-else>
+                        <template v-slot:formExtraButtons>
+                            <span class="button" @click="cancelBookingProcess()">Abbrechen</span>
+                        </template>
+                    </NubsyForm>
+                </div>
+                <div class="dialog-footer" v-if="!authentication.loggedIn">
+                    <NuxtLink to="/login" class="button stretch" @click="cancelBookingProcess()">zur Anmeldung</NuxtLink>
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
