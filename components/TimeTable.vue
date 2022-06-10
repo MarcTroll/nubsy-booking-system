@@ -96,7 +96,7 @@
     }
 
     function getBookingFormUrl() {
-        return `/api/test?courtID=${bookingData.value.courtId}&timeSlotStart=${bookingData.value.timeSlotStart}`
+        return `/api/reservation/edit?courtID=${bookingData.value.courtId}&timeSlotStart=${bookingData.value.timeSlotStart}`
     }
 </script>
 
@@ -154,7 +154,7 @@
                     <div v-if="!authentication.loggedIn">
                         Du musst dich anmelden, um Plätze buchen zu können.
                     </div>
-                    <NubsyForm :form-url="getBookingFormUrl()" additional-class-list="grid grid-2" v-else>
+                    <NubsyForm :form-url="getBookingFormUrl()" additional-class-list="" v-else>
                         <template v-slot:formExtraButtons>
                             <span class="button" @click="cancelBookingProcess()">Abbrechen</span>
                         </template>
